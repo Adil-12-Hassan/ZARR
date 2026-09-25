@@ -28,14 +28,14 @@ luxury timepieces for yourself or as a gift for someone special.
 
 ## 🛠️ Tech Stack
 | Layer    | Technology                    |
-|----------|-------------------------------|
+|----------|---|
 | Frontend | React, CSS3                   |
 | Backend  | Node.js, Express, MongoDB     |
 | Auth     | JWT                           |
 
 ## ⚙️ Getting Started
 ```bash
-git clone https://github.com/Adil-12-Hassan/CodeAlpha-E-Commerce.git
+git clone https://github.com/Adil-12-Hassan/ZARR.git
 cd CodeAlpha-E-Commerce
 npm install
 npm start
@@ -44,25 +44,25 @@ npm start
 ## 🗂️ Folder Structure
 ```
 CodeAlpha-E-Commerce/
-├── public/
-│   ├── index.html
-│   ├── favicon.ico
-│   ├── manifest.json
-│   └── robots.txt
+├- public/
+│   ├- index.html
+│   ├- favicon.ico
+│   ├- manifest.json
+│   └- robots.txt
 │
-├── client/
-│   └── src/
-│       ├── assets/          # Images, icons, logos
-│       ├── components/      # Reusable UI components
-│       ├── pages/           # Route-level page components
-│       ├── styles/          # CSS files for components and pages
-│       ├── App.jsx
-│       ├── global.css
-│       └── index.jsx
+├- client/
+│   └- src/
+│       ├- assets/          # Images, icons, logos
+│       ├- components/      # Reusable UI components
+│       ├- pages/           # Route-level page components
+│       ├- styles/          # CSS files for components and pages
+│       ├- App.jsx
+│       ├- global.css
+│       └- index.jsx
 │
-├── .gitignore
-├── package.json
-└── README.md
+├- .gitignore
+├- package.json
+└- README.md
 ```
 
 ## 🔌 Environment Variables

@@ -1,0 +1,720 @@
+.about-page {
+    --zarr-bg: #07100d;
+    --zarr-bg-soft: #061914;
+    --zarr-gold: #c88a2b;
+    --zarr-gold-light: #e0a84d;
+    --zarr-text: #f1eee7;
+    --zarr-muted: #aaa9a1;
+    --zarr-border: rgba(200, 138, 43, 0.25);
+    background: var(--zarr-bg);
+    color: var(--zarr-text);
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+.about-hero-content,
+.pillar-grid,
+.zarr-legacy>.legacy-timeline,
+.zarr-team>.team-grid,
+.craftsmanship>.craft-item,
+.about-stats>.stats-grid,
+.about-cta {
+    width: min(1200px, 90%);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+/* HERO  */
+.about-hero {
+    min-height: 680px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    background:
+        linear-gradient(90deg,
+            rgba(1, 13, 10, 0.98) 0%,
+            rgba(1, 13, 10, 0.88) 40%,
+            rgba(1, 13, 10, 0.55) 70%,
+            rgba(1, 13, 10, 0.20) 100%),
+        url("https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?auto=format&fit=crop&w=1800&q=85");
+    background-size: cover;
+    background-position: center;
+}
+
+/* HERO CONTENT */
+.about-hero-content {
+    position: relative;
+    z-index: 1;
+    padding-top: 80px;
+    padding-bottom: 80px;
+}
+
+.about-eyebrow {
+    display: block;
+    color: var(--zarr-gold);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 2px;
+}
+
+.about-hero h1 {
+    margin: 18px 0 24px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(42px, 5vw, 72px);
+    line-height: 1.05;
+    font-weight: 400;
+    letter-spacing: -1px;
+}
+
+.about-hero h1 span {
+    color: var(--zarr-text);
+}
+
+.about-line {
+    width: 55px;
+    height: 2px;
+    margin: 25px 0;
+    background: var(--zarr-gold);
+}
+
+.about-hero p {
+    max-width: 570px;
+    color: var(--zarr-muted);
+    font-size: 15px;
+    line-height: 1.8;
+}
+
+
+/*  
+   GENERAL SECTION HEADING
+  */
+
+.about-page .section-heading {
+    width: min(900px, 90%);
+    margin: 0 auto;
+    padding: 70px;
+    display: block;
+    border-bottom: none;
+    text-align: center;
+}
+
+.about-page .section-heading>span {
+    display: block;
+    color: var(--zarr-gold);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 2px;
+}
+
+.about-page .section-heading h2 {
+    margin: 12px 0;
+    color: var(--zarr-text);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(30px, 4vw, 46px);
+    line-height: 1.15;
+    font-weight: 400;
+}
+
+.about-page .section-heading p {
+    max-width: 600px;
+    margin: 16px auto 0;
+    color: var(--zarr-muted);
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+
+/*  
+   BRAND PILLARS
+  */
+
+.brand-pillars {
+    padding: 55px 0 70px;
+    border-top: 1px solid var(--zarr-border);
+}
+
+.pillar-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border: 1px solid var(--zarr-border);
+}
+
+.pillar-card {
+    min-height: 300px;
+    padding: 45px 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-right: 1px solid var(--zarr-border);
+    transition:
+        background 0.3s ease,
+        transform 0.3s ease;
+}
+
+.pillar-card:last-child {
+    border-right: none;
+}
+
+.pillar-card:hover {
+    background: rgba(200, 138, 43, 0.035);
+}
+
+/* ICON */
+.pillar-icon {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--zarr-gold);
+    border-radius: 50%;
+    color: var(--zarr-gold);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 25px;
+}
+
+/*
+    IMPORTANT:
+    JSX uses H2, not H3.
+*/
+
+.pillar-card h2 {
+    margin: 0;
+    color: var(--zarr-gold);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+}
+
+.pillar-card p {
+    max-width: 230px;
+    margin: 15px 0 0;
+    color: var(--zarr-muted);
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+
+/*  
+   ZARR LEGACY
+  */
+
+/*
+    IMPORTANT: JSX:
+        className="zarr-legacy" So this MUST be .zarr-legacy,
+    not .legacy.
+*/
+
+.zarr-legacy {
+    padding-bottom: 80px;
+    border-top: 1px solid var(--zarr-border);
+}
+
+.legacy-timeline {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+}
+
+.legacy-item {
+    min-width: 0;
+}
+
+.legacy-image {
+    width: 100%;
+    aspect-ratio: 1.25;
+    overflow: hidden;
+    border: 1px solid var(--zarr-border);
+    background: var(--zarr-bg-soft);
+}
+
+.legacy-image img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+.legacy-item:hover .legacy-image img {
+    transform: scale(1.05);
+}
+
+.legacy-content {
+    padding: 18px 8px 8px;
+}
+
+.legacy-year {
+    display: block;
+    color: var(--zarr-gold);
+    font-size: 13px;
+    letter-spacing: 1.5px;
+}
+
+.legacy-content h3 {
+    margin: 10px 0 8px;
+    color: var(--zarr-text);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.legacy-content p {
+    margin: 0;
+    color: var(--zarr-muted);
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+/* TEAM  */
+/* IMPORTANT:
+    JSX: className="zarr-team"
+    So this MUST be .zarr-team,
+    not .team.
+*/
+.zarr-team {
+    padding-bottom: 85px;
+    border-top: 1px solid var(--zarr-border);
+}
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+.team-card {
+    padding-bottom: 8px;
+    text-align: center;
+}
+
+.team-image {
+    width: 100%;
+    aspect-ratio: 0.8;
+    overflow: hidden;
+    border: 1px solid var(--zarr-border);
+    background: var(--zarr-bg-soft);
+}
+
+.team-image img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    filter: saturate(0.75);
+    transition:
+        transform 0.6s ease,
+        filter 0.6s ease;
+}
+
+.team-card:hover .team-image img {
+    transform: scale(1.04);
+    filter: saturate(0.95);
+}
+
+.team-role {
+    display: block;
+    margin-top: 18px;
+    color: var(--zarr-gold);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+}
+
+.team-card h3 {
+    margin: 8px 0;
+    color: var(--zarr-text);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 20px;
+    font-weight: 400;
+}
+
+.team-card p {
+    max-width: 250px;
+    margin: 0 auto;
+    color: var(--zarr-muted);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* CRAFTSMANSHIP  */
+.craftsmanship {
+    padding-bottom: 90px;
+    border-top: 1px solid var(--zarr-border);
+}
+
+.craft-item {
+    margin-bottom: 85px;
+}
+
+.craft-item:last-child {
+    margin-bottom: 0;
+}
+
+/* IMAGE */
+
+.craft-image {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 2 / 0.9;
+    overflow: hidden;
+    border: 1px solid var(--zarr-border);
+    background: var(--zarr-bg-soft);
+}
+
+.craft-image img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    transition: transform 0.7s ease;
+}
+
+.craft-item:hover .craft-image img {
+    transform: scale(1.025);
+}
+
+/* A / B LABEL */
+.craft-image>span {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    color: var(--zarr-gold);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 18px;
+}
+
+/* CONTENT */
+.craft-content {
+    max-width: 850px;
+    margin: 38px auto 0;
+    padding: 0 12px;
+    text-align: center;
+}
+
+.craft-number {
+    color: var(--zarr-gold);
+    font-size: 11px;
+    letter-spacing: 2px;
+}
+
+.craft-content h3 {
+    margin: 10px 0 0;
+    color: var(--zarr-text);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 25px;
+    font-weight: 400;
+}
+
+.gold-line {
+    width: 55px;
+    height: 2px;
+    margin: 20px auto;
+    background: var(--zarr-gold);
+}
+
+.craft-content p {
+    margin: 0;
+    color: var(--zarr-muted);
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+/* STATS  */
+.about-stats {
+    display: block;
+    padding-top: 1px;
+    padding-bottom: 90px;
+    border-top: 1px solid var(--zarr-border);
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid var(--zarr-border);
+    border-bottom: 1px solid var(--zarr-border);
+}
+
+.stat {
+    min-height: 190px;
+    padding: 35px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-right: 1px solid var(--zarr-border);
+}
+
+.stat:last-child {
+    border-right: none;
+}
+
+/* ICON */
+.stat-icon {
+    margin-bottom: 12px;
+    color: var(--zarr-gold);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 25px;
+}
+
+
+/* NUMBER */
+.stat strong {
+    display: block;
+    color: var(--zarr-text);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 42px;
+    line-height: 1;
+    font-weight: 400;
+}
+
+/* LABEL */
+.stat>span {
+    display: block;
+    margin-top: 10px;
+    color: var(--zarr-muted);
+    font-size: 11px;
+    letter-spacing: 1.2px;
+}
+
+/* CTA  */
+.about-cta {
+    min-height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    padding-top: 60px;
+}
+
+.about-cta-content>span {
+    display: block;
+    color: var(--zarr-gold);
+    font-size: 11px;
+    letter-spacing: 2px;
+}
+
+.about-cta-content h3 {
+    margin: 8px 0 10px;
+    color: var(--zarr-text);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 30px;
+    font-weight: 400;
+}
+
+.about-cta-content p {
+    max-width: 500px;
+    margin: 0;
+    color: var(--zarr-muted);
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+/* BUTTON */
+.about-cta-button {
+    flex-shrink: 0;
+    padding: 15px 25px;
+    border: 1px solid var(--zarr-gold);
+    color: var(--zarr-gold);
+    text-decoration: none;
+    font-size: 11px;
+    letter-spacing: 1.2px;
+    transition:
+        background 0.3s ease,
+        color 0.3s ease;
+}
+
+.about-cta-button:hover {
+    background: var(--zarr-gold);
+    color: #07110e;
+}
+
+/* TABLET */
+@media (max-width: 1000px) {
+
+    .pillar-grid,
+    .legacy-timeline,
+    .team-grid,
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .pillar-card:nth-child(2) {
+        border-right: none;
+    }
+
+    .pillar-card:nth-child(-n + 2) {
+        border-bottom: 1px solid var(--zarr-border);
+    }
+
+    .pillar-card:nth-child(3) {
+        border-right: 1px solid var(--zarr-border);
+    }
+
+    .stat:nth-child(2) {
+        border-right: none;
+    }
+
+    .stat:nth-child(-n + 2) {
+        padding: 70px;
+        border-bottom: 1px solid var(--zarr-border);
+    }
+
+    .about-cta {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+/*    MOBILE  */
+@media (max-width: 650px) {
+    .about-hero {
+        min-height: 600px;
+        background-position: 60% center;
+    }
+
+    .about-hero-content {
+        padding-top: 110px;
+        padding-bottom: 75px;
+    }
+
+    .about-hero h1 {
+        font-size: 40px;
+        letter-spacing: -0.5px;
+    }
+
+    .about-hero p {
+        font-size: 14px;
+        line-height: 1.75;
+    }
+
+    .about-page .section-heading {
+        padding: 70px 0 40px;
+    }
+
+    .about-page .section-heading h2 {
+        font-size: 32px;
+    }
+
+    .pillar-grid,
+    .legacy-timeline,
+    .team-grid,
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* PILLARS */
+    .pillar-card {
+        min-height: 260px;
+        border-right: none !important;
+        border-bottom: 1px solid var(--zarr-border);
+    }
+
+    .pillar-card:last-child {
+        border-bottom: none;
+    }
+
+    /* LEGACY */
+    .legacy-timeline {
+        gap: 45px;
+    }
+
+    .legacy-image {
+        aspect-ratio: 1.35;
+        margin: 85px 0;
+    }
+
+    .legacy-content {
+        padding: 22px 8px 0;
+    }
+
+    /* TEAM */
+    .team-grid {
+        gap: 50px;
+    }
+
+    .team-image {
+        max-width: 350px;
+        margin: 0 auto;
+    }
+
+    .team-card {
+        padding-bottom: 4px;
+        margin: 120px 0;
+    }
+
+    /* CRAFTSMANSHIP */
+    .craft-item {
+        margin-bottom: 65px;
+    }
+
+    .craft-image {
+        aspect-ratio: 1.15;
+        margin: 120px 0;
+    }
+
+    .craft-content {
+        margin-top: 28px;
+        padding: 0 8px;
+    }
+
+    .craft-content h3 {
+        font-size: 22px;
+    }
+
+    /* STATS */
+    .stat {
+        min-height: 170px;
+        border-right: none;
+        border-bottom: 1px solid var(--zarr-border);
+    }
+
+    .stat:last-child {
+        border-bottom: none;
+    }
+
+    /* CTA */
+    .about-cta {
+        padding-top: 45px;
+        gap: 30px;
+    }
+
+    .about-cta-content h3 {
+        font-size: 27px;
+    }
+
+    .about-cta-button {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+/*  
+   VERY SMALL SCREENS
+  */
+@media (max-width: 400px) {
+    .about-hero h1 {
+        font-size: 34px;
+    }
+
+    .about-page .section-heading h2 {
+        font-size: 28px;
+    }
+
+    .pillar-card {
+        padding: 35px 22px;
+    }
+
+    .craft-content h3 {
+        font-size: 20px;
+    }
+
+    .stat strong {
+        font-size: 36px;
+    }
+}

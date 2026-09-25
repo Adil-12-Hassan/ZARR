@@ -1,0 +1,8 @@
+/* Dashboard-specific tweaks. Most styling comes from admin-ui.css so the
+   look stays consistent with every other admin page. */
+
+@media (max-width: 640px) {
+  .donut-chart {
+    flex-direction: column;
+  }
+}

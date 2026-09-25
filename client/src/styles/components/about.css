@@ -1,0 +1,152 @@
+.about {
+    position: relative;
+    width: 100%;
+    min-height: 430px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background: #07100d;
+}
+
+/* Background */
+.about-background {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+.about-background img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* Overlay */
+.about::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(90deg,
+            rgba(5, 12, 10, 0.97) 0%,
+            rgba(5, 12, 10, 0.91) 35%,
+            rgba(5, 12, 10, 0.68) 65%,
+            rgba(5, 12, 10, 0.35) 100%,
+        );
+}
+
+/* Content */
+.about-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    padding: 75px 8%;
+}
+
+/* Story */
+.about-story {
+    max-width: 560px;
+}
+
+.about-label {
+    display: inline-block;
+    margin-bottom: 15px;
+    color: #c29d4f;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+}
+
+.about-heading {
+    margin: 0;
+    color: #f1eee5;
+    font-size: clamp(2rem, 3.5vw, 3.5rem);
+    line-height: 1;
+    font-weight: 400;
+    letter-spacing: 1px;
+}
+
+.about-divider {
+    width: 45px;
+    height: 1px;
+    margin: 20px 0;
+    background: #c29d4f;
+}
+
+.about-description {
+    max-width: 500px;
+    margin: 0 0 28px;
+    color: rgba(241, 238, 229, 0.68);
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+.about-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 13px 22px;
+    border: 1px solid rgba(192, 157, 79, 0.65);
+    color: #f1eee5;
+    text-decoration: none;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+
+.about-button span {
+    font-size: 15px; transition: transform 0.3s ease;
+}
+
+.about-button:hover {
+    background: #c29d4f;
+    border-color: #c29d4f; color: #07100d;
+}
+
+.about-button:hover span {
+    transform: translateX(4px);
+}
+
+
+/* STATS */
+
+.about-stats {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; gap: 28px; padding-left: 45px; border-left: 1px solid rgba(194, 157, 79, 0.3);
+}
+
+.about-stat {
+    display: flex;
+    align-items: center; gap: 20px;
+}
+
+.about-stat-icon {
+    width: 42px;
+    height: 42px; object-fit: contain;
+}
+
+.about-stat-content {
+    display: flex;
+    flex-direction: column; gap: 3px;
+}
+
+.about-stat-number {
+    color: #f1eee5; font-size: 25px;
+    font-weight: 400; letter-spacing: 1px;
+}
+
+.about-stat-label {
+    color: #c29d4f; font-size: 9px;
+    font-weight: 600; letter-spacing: 1.5px;
+}

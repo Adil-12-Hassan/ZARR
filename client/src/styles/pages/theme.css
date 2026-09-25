@@ -1,0 +1,113 @@
+/*  =================
+   ZARR Admin — design tokens
+   Copied from the storefront's :root palette. One fix: --color-green-black
+   was missing a hex digit (#03120 -> #03120f) so it doesn't fall back to
+   black in every browser.
+    ================= */
+
+:root {
+  /* Core dark-green theme */
+  --color-black: #020706;
+  --color-deep-black: #010403;
+  --color-green-black: #03120f;
+  --color-green-dark: #03130f;
+  --color-green: #061b16;
+  --color-green-soft: #07100d;
+  --color-green-panel: #061914;
+  --color-green-card: #07150f;
+  --color-green-light: #234b38;
+
+  /* Additional green surfaces */
+  --color-surface-dark: #020b08;
+  --color-surface-deep: #03100c;
+  --color-surface-panel: #04110c;
+  --color-surface-card: #08140f;
+  --color-surface-input: #06120e;
+  --color-surface-hover: #091812;
+  --color-surface-muted: #0b1d17;
+
+  /* Gold brand palette */
+  --color-gold-dark: #74541e;
+  --color-gold-deep: #805f25;
+  --color-gold: #b88a3b;
+  --color-gold-primary: #c29d4f;
+  --color-gold-warm: #c99a3d;
+  --color-gold-light: #d1a45b;
+  --color-gold-pale: #e0a84d;
+  --color-gold-highlight: #e2b761;
+
+  /* Text */
+  --color-text-white: #f4f2eb;
+  --color-text-light: #f1eee5;
+  --color-text-cream: #f4f0e7;
+  --color-text-heading: #e9e5d8;
+  --color-text-soft: #e5dfd2;
+  --color-text-muted: #c5c1b6;
+  --color-text-secondary: #aaa99f;
+  --color-text-dim: #8c918a;
+  --color-text-placeholder: #777c74;
+  --color-text-dark: #17231d;
+
+  /* Borders */
+  --color-border-gold: rgba(194, 157, 79, 0.25);
+  --color-border-gold-soft: rgba(194, 157, 79, 0.18);
+  --color-border-gold-medium: rgba(194, 157, 79, 0.35);
+  --color-border-gold-strong: rgba(194, 157, 79, 0.55);
+  --color-border-muted: #26372f;
+  --color-border-dark: #1c2923;
+  --color-border-light: #e5dfd4;
+
+  /* Overlays */
+  --color-overlay-black-light: rgba(0, 0, 0, 0.15);
+  --color-overlay-black: rgba(0, 0, 0, 0.45);
+  --color-overlay-black-medium: rgba(0, 0, 0, 0.62);
+  --color-overlay-black-heavy: rgba(0, 0, 0, 0.75);
+  --color-overlay-green-light: rgba(5, 12, 10, 0.38);
+  --color-overlay-green: rgba(1, 7, 6, 0.72);
+  --color-overlay-green-heavy: rgba(1, 7, 6, 0.96);
+  --color-overlay-panel: rgba(4, 20, 16, 0.82);
+
+  /* Decorative green transparencies */
+  --color-green-glow: rgba(21, 57, 42, 0.2);
+  --color-green-highlight: rgba(22, 58, 43, 0.32);
+  --color-green-border: rgba(10, 38, 28, 0.5);
+  --color-green-soft-overlay: rgba(8, 30, 23, 0.7);
+
+  /* Decorative gold transparencies */
+  --color-gold-glow: rgba(201, 155, 62, 0.08);
+  --color-gold-soft: rgba(201, 163, 78, 0.08);
+  --color-gold-overlay: rgba(185, 138, 61, 0.24);
+  --color-gold-border: rgba(185, 138, 61, 0.38);
+
+  /* Admin theme */
+  --color-admin-background: #020605;
+  --color-admin-gold: #d99c32;
+  --color-admin-gold-border: rgba(201, 145, 54, 0.5);
+  --color-admin-text: #f2f2f2;
+
+  /* Dashboard theme (customer-facing account dashboard) */
+  --color-dashboard-background: #f4f1eb;
+  --color-dashboard-panel: #fffdf9;
+  --color-dashboard-text: #17231d;
+  --color-dashboard-muted: #5d665e;
+  --color-dashboard-gold: #c9a45d;
+  --color-dashboard-danger: #b84c3c;
+
+  /* Checkout theme */
+  --color-checkout-border: #3a443f;
+  --color-checkout-muted: #747f78;
+  --color-checkout-panel: #08140f;
+  --color-checkout-highlight: #b88732;
+
+  /* ---- Admin-panel-only additions (kept in the same family) ---- */
+  --color-success: #4f8f6d;
+  --color-success-soft: rgba(79, 143, 109, 0.15);
+  --color-danger: #b8483c;
+  --color-danger-soft: rgba(184, 72, 60, 0.14);
+  --color-info: #4d7ea8;
+  --color-info-soft: rgba(77, 126, 168, 0.14);
+  --shadow-panel: 0 12px 32px rgba(0, 0, 0, 0.45);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+}
