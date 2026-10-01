@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import StatCard from "../../components/admin/StatCard";
 import LineChart from "../../components/admin/LineChart";
 import DonutChart from "../../components/admin/DonutChart";
@@ -7,101 +7,68 @@ import { useOrders } from "../../context/OrdersContext";
 import "../../styles/components/admin-ui.css";
 import "../../styles/pages/adminDashboard.css";
 
-// TODO: replace with data fetched from your API (e.g. GET /api/revenue/monthly)
-const SEED_MONTHLY_REVENUE = [
-  {
-    month: "Mar",
-    label: "March 2026",
-    value: 612000,
-    orders: 18,
-    archived: false,
-  },
-  {
-    month: "Apr",
-    label: "April 2026",
-    value: 745000,
-    orders: 22,
-    archived: false,
-  },
-  {
-    month: "May",
-    label: "May 2026",
-    value: 689000,
-    orders: 20,
-    archived: false,
-  },
-  {
-    month: "Jun",
-    label: "June 2026",
-    value: 831000,
-    orders: 25,
-    archived: false,
-  },
-  {
-    month: "Jul",
-    label: "July 2026",
-    value: 902000,
-    orders: 27,
-    archived: false,
-  },
-  {
-    month: "Aug",
-    label: "August 2026",
-    value: 958500,
-    orders: 29,
-    archived: false,
-  },
-];
+const money = (n) => `PKR ${Number(n || 0).toLocaleString()}`;
 
-// TODO: replace with data fetched from your API (e.g. GET /api/revenue/by-category)
-const REVENUE_BY_CATEGORY = [
-  { label: "Automatic", value: 412000 },
-  { label: "Chronograph", value: 318000 },
-  { label: "Moonphase", value: 165000 },
-  { label: "Limited Edition", value: 98000 },
-];
+function buildMonthlyRevenue(orders) {
+  const monthMap = new Map();
+  const now = new Date();
 
-const money = (n) => `PKR ${n.toLocaleString()}`;
+  for (let i = 5; i >= 0; i -= 1) {
+    const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
+    const label = date.toLocaleDateString("en-US", { month: "short", year: "numeric" });
+    monthMap.set(key, { month: key, label, value: 0, orders: 0, archived: false });
+  }
+
+  orders.forEach((order) => {
+    const date = new Date(order.createdAt || order.date || Date.now());
+    const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
+    if (!monthMap.has(key)) return;
+
+    const current = monthMap.get(key);
+    current.value += Number(order.total || 0);
+    current.orders += 1;
+  });
+
+  return [...monthMap.values()];
+}
+
+function buildProductRevenue(orders) {
+  const map = new Map();
+
+  orders.forEach((order) => {
+    (order.items || []).forEach((item) => {
+      const name = item.name || "Product";
+      const value = Number(item.price || 0) * Number(item.quantity || 1);
+      map.set(name, (map.get(name) || 0) + value);
+    });
+  });
+
+  return [...map.entries()].map(([label, value]) => ({ label, value })).slice(0, 4);
+}
 
 export default function AdminDashboard() {
   const { orders } = useOrders();
-  const [monthlyRevenue, setMonthlyRevenue] = useState(SEED_MONTHLY_REVENUE);
-
-  const visibleMonths = monthlyRevenue.filter((m) => !m.archived);
+  const monthlyRevenue = useMemo(() => buildMonthlyRevenue(orders), [orders]);
+  const productRevenue = useMemo(() => buildProductRevenue(orders), [orders]);
 
   const totalRevenue = useMemo(
-    () => visibleMonths.reduce((sum, m) => sum + m.value, 0),
-    [visibleMonths],
+    () => orders.reduce((sum, order) => sum + Number(order.total || 0), 0),
+    [orders],
   );
-  const pendingOrders = orders.filter(
-    (o) => o.status === "Processing" || o.status === "Received",
-  ).length;
+
+  const pendingOrders = orders.filter((o) => ["Pending", "Confirmed", "Processing", "Shipped"].includes(o.status)).length;
   const avgOrderValue = orders.length
-    ? Math.round(orders.reduce((s, o) => s + o.total, 0) / orders.length)
+    ? Math.round(orders.reduce((s, o) => s + Number(o.total || 0), 0) / orders.length)
     : 0;
 
-  const chartData = visibleMonths.map((m) => ({
-    label: m.month,
-    value: m.value,
-  }));
-
-  // Save this month's revenue row as a CSV file, then remove it from the
-  // dashboard/database — matches "save the file and details" from the brief.
-  const handleSaveAndRemove = (month) => {
-    downloadCsv(
-      `zarr-revenue-${month.month.toLowerCase()}-${month.label.split(" ")[1]}`,
-      [{ Month: month.label, Revenue: month.value, Orders: month.orders }],
-    ); // TODO: call your API to persist the archive, e.g.
-    // api.delete(`/api/revenue/monthly/${month.month}`);
-    setMonthlyRevenue((prev) =>
-      prev.map((m) => (m.month === month.month ? { ...m, archived: true } : m)),
-    );
-  };
+  const currentMonth = monthlyRevenue[monthlyRevenue.length - 1];
+  const chartData = monthlyRevenue.map((m) => ({ label: m.month, value: m.value }));
 
   const handleExportAll = () => {
     downloadCsv(
       "zarr-revenue-all-months",
-      visibleMonths.map((m) => ({
+      monthlyRevenue.map((m) => ({
         Month: m.label,
         Revenue: m.value,
         Orders: m.orders,
@@ -115,19 +82,19 @@ export default function AdminDashboard() {
         <StatCard
           label="Total revenue"
           value={money(totalRevenue)}
-          trend="8.2% vs last month"
+          trend="Live totals"
           trendDirection="up"
         />
         <StatCard
           label="Orders this month"
-          value={monthlyRevenue.at(-1)?.orders ?? 0}
-          trend="3 more than July"
+          value={currentMonth?.orders ?? 0}
+          trend="Current month"
           trendDirection="up"
         />
         <StatCard
           label="Average order value"
           value={money(avgOrderValue)}
-          trend="1.4% vs last month"
+          trend="Live average"
           trendDirection="down"
         />
         <StatCard
@@ -136,66 +103,61 @@ export default function AdminDashboard() {
           trend="Needs attention"
           trendDirection="down"
         />
-      </div>   <div className="admin-grid admin-grid--2">
+      </div>
+
+      <div className="admin-grid admin-grid--2">
         <div className="admin-panel">
           <div className="admin-panel__head">
             <div>
               <h2>Revenue trend</h2>
-              <p>Monthly revenue over the last {visibleMonths.length} months</p>
+              <p>Live monthly revenue from real orders</p>
             </div>
           </div>
           <LineChart data={chartData} formatValue={money} />
-        </div>     <div className="admin-panel">
+        </div>
+
+        <div className="admin-panel">
           <div className="admin-panel__head">
             <div>
-              <h2>Revenue by category</h2>
-              <p>Share of total revenue this quarter</p>
+              <h2>Revenue by product</h2>
+              <p>Share of current live order value</p>
             </div>
           </div>
-          <DonutChart data={REVENUE_BY_CATEGORY} />
+          {productRevenue.length ? <DonutChart data={productRevenue} /> : <div className="chart-empty">No product revenue yet.</div>}
         </div>
-      </div>   <div className="admin-panel" style={{ marginTop: 20 }}>
+      </div>
+
+      <div className="admin-panel" style={{ marginTop: 20 }}>
         <div className="admin-panel__head">
           <div>
             <h2>Monthly revenue log</h2>
-            <p>Save a month as a CSV file, then clear it from the dashboard</p>
+            <p>Export the current order totals from the live dashboard</p>
           </div>
           <button className="btn btn-outline btn-sm" onClick={handleExportAll}>
             Export all
           </button>
-        </div>     <div className="table-wrap">
+        </div>
+
+        <div className="table-wrap">
           <table className="admin-table">
             <thead>
               <tr>
                 <th>Month</th>
                 <th>Orders</th>
                 <th>Revenue</th>
-                <th></th>
               </tr>
             </thead>
             <tbody>
-              {visibleMonths.length === 0 && (
+              {monthlyRevenue.length === 0 && (
                 <tr>
-                  <td colSpan={4} className="table-empty">
-                    No months logged yet.
-                  </td>
+                  <td colSpan={3} className="table-empty">No order data yet.</td>
                 </tr>
               )}
-              {visibleMonths.map((m) => (
+              {monthlyRevenue.map((m) => (
                 <tr key={m.month}>
                   <td className="admin-table__primary">{m.label}</td>
                   <td>{m.orders}</td>
                   <td>{money(m.value)}</td>
-                  <td>
-                    <div className="admin-table__actions">
-                      <button
-                        className="btn btn-ghost btn-sm"
-                        onClick={() => handleSaveAndRemove(m)}
-                      >
-                        Save as CSV &amp; remove
-                      </button>
-                    </div>
-                  </td>
                 </tr>
               ))}
             </tbody>

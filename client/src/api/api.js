@@ -1,17 +1,32 @@
+import { io } from "socket.io-client";
+
 // All API calls go through this file.
 // Base URL points to your Express server.
 
-const BASE_URL = process.env.BACKEND_URL || "http://localhost:5000/api";
+const BASE_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000/api";
 
 // - Helper: get the stored token
+// Checks the admin's sessionStorage slot first (mirrors AuthContext's
+// priority), then the regular user's localStorage slot.
 function getToken() {
-    const raw = localStorage.getItem("zarr_auth_user");
-    if (!raw) return null;
     try {
-        return JSON.parse(raw).token || null;
-    } catch {
-        return null;
-    }
+        const adminRaw = sessionStorage.getItem("zarr_auth_admin");
+        if (adminRaw) return JSON.parse(adminRaw).token || null;
+    } catch { /* fall through */ }
+
+    try {
+        const userRaw = localStorage.getItem("zarr_auth_user");
+        if (userRaw) return JSON.parse(userRaw).token || null;
+    } catch { /* no token available */ }
+
+    return null;
+}
+
+export function subscribeToProductUpdates(onUpdate) {
+    const socketUrl = BASE_URL.replace(/\/api\/?$/, "");
+    const socket = io(socketUrl, { auth: { token: getToken() } });
+    socket.on("products:updated", onUpdate);
+    return () => socket.disconnect();
 }
 
 // Core request function
@@ -25,7 +40,9 @@ async function request(path, options = {}) {
         headers,
     }); const data = await res.json(); if (!res.ok) {
         // Throw the server's error message so components can show it
-        throw new Error(data.message || "Something went wrong");
+        const error = new Error(data.message || "Something went wrong");
+        error.status = res.status;
+        throw error;
     } return data;
 }
 
@@ -34,6 +51,8 @@ export const authAPI = {
     register: (body) => request("/auth/register", { method: "POST", body: JSON.stringify(body) }),
     login: (body) => request("/auth/login", { method: "POST", body: JSON.stringify(body) }),
     adminLogin: (body) => request("/auth/admin/login", { method: "POST", body: JSON.stringify(body) }),
+    me: () => request("/auth/me"),
+    logout: () => request("/auth/logout", { method: "POST" }),
 };
 
 // Products

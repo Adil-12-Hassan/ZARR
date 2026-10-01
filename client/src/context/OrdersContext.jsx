@@ -11,7 +11,7 @@ import { useAuth } from "./AuthContext";
 const OrdersContext = createContext(null);
 
 export function OrdersProvider({ children }) {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isAdmin } = useAuth();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -56,14 +56,27 @@ export function OrdersProvider({ children }) {
     }
   }, []);
 
-  // - Load user orders when they log in ----─
+  const addOrder = useCallback((order) => {
+    setOrders((current) => [
+      order,
+      ...current.filter((item) => item._id !== order._id),
+    ]);
+  }, []);
+
+  // - Load the correct order set based on role ----─
   useEffect(() => {
-    if (isAuthenticated) {
-      fetchMyOrders();
-    } else {
+    if (!isAuthenticated) {
       setOrders([]);
+      return;
     }
-  }, [isAuthenticated, fetchMyOrders]);
+
+    if (isAdmin) {
+      fetchAllOrders();
+      return;
+    }
+
+    fetchMyOrders();
+  }, [isAuthenticated, isAdmin, fetchAllOrders, fetchMyOrders]);
 
   return (
     <OrdersContext.Provider
@@ -74,6 +87,7 @@ export function OrdersProvider({ children }) {
         fetchMyOrders,
         fetchAllOrders,
         updateStatus,
+        addOrder,
       }}
     >
       {children}

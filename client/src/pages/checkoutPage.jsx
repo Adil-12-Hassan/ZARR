@@ -6,6 +6,7 @@ import "../styles/pages/checkoutPage.css";
 import "../global.css";
 import useCartStore from "../store/cartStore";
 import { useAuth } from "../context/AuthContext";
+import { useOrders } from "../context/OrdersContext";
 import { orderAPI } from "../api/api";
 
 const paymentMethods = [
@@ -20,6 +21,7 @@ const paymentMethods = [
 function Checkout() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { addOrder } = useOrders();
   const cartItems = useCartStore((state) => state.items);
   const clearCart = useCartStore((state) => state.clearCart);
 
@@ -109,7 +111,9 @@ function Checkout() {
         total,
         couponCode: couponApplied ? "ZARR10" : "",
         paymentMethod,
-      };   await orderAPI.place(orderData);
+      };
+      const createdOrder = await orderAPI.place(orderData);
+      addOrder(createdOrder);
       clearCart();
       navigate("/dashboard/orders");
     } catch (err) {

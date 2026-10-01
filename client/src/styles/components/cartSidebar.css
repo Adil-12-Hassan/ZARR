@@ -141,10 +141,13 @@
 }
 
 .checkout-button {
+    display: block;
     border: none;
     background: #c29d4f;
     color: #07100d;
     font-weight: 600;
+    text-align: center;
+    text-decoration: none;
 }
 
 .cart-button {

@@ -1,81 +1,48 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { userAPI } from "../../api/api";
+import { useOrders } from "../../context/OrdersContext";
 import "../../styles/components/admin-ui.css";
 
-// TODO: replace with data fetched from your API (e.g. GET /api/users)
-const SEED_USERS = [
-  {
-    id: "U-201",
-    name: "Ayesha Raza",
-    email: "ayesha.raza@example.com",
-    joined: "2026-02-11",
-    orders: 3,
-    spent: 268500,
-    status: "Active",
-  },
-  {
-    id: "U-202",
-    name: "Bilal Farooq",
-    email: "bilal.f@example.com",
-    joined: "2026-03-04",
-    orders: 1,
-    spent: 95000,
-    status: "Active",
-  },
-  {
-    id: "U-203",
-    name: "Hina Shah",
-    email: "hina.shah@example.com",
-    joined: "2025-11-20",
-    orders: 5,
-    spent: 412000,
-    status: "Active",
-  },
-  {
-    id: "U-204",
-    name: "Omar Sheikh",
-    email: "omar.sheikh@example.com",
-    joined: "2026-01-15",
-    orders: 1,
-    spent: 0,
-    status: "Blocked",
-  },
-  {
-    id: "U-205",
-    name: "Mahnoor Iqbal",
-    email: "mahnoor.i@example.com",
-    joined: "2025-09-02",
-    orders: 4,
-    spent: 356000,
-    status: "Active",
-  },
-];
-
-const money = (n) => `PKR ${n.toLocaleString()}`;
+const money = (n) => `PKR ${Number(n || 0).toLocaleString()}`;
 
 export default function ManageUsers() {
-  const [users, setUsers] = useState(SEED_USERS);
+  const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const { orders } = useOrders();
+
+  useEffect(() => {
+    let active = true;
+    userAPI.getAll()
+      .then((data) => { if (active) setUsers(data); })
+      .catch((err) => { if (active) setError(err.message || "Unable to load customers."); })
+      .finally(() => { if (active) setLoading(false); });
+    return () => { active = false; };
+  }, []);
+
+  const orderTotals = useMemo(() => {
+    const totals = new Map();
+    orders.forEach((order) => {
+      const userId = String(order.user?._id || order.user || "");
+      if (!userId) return;
+      const current = totals.get(userId) || { count: 0, spent: 0 };
+      current.count += 1;
+      current.spent += Number(order.total || 0);
+      totals.set(userId, current);
+    });
+    return totals;
+  }, [orders]);
 
   const filtered = useMemo(
     () =>
       users.filter(
         (u) =>
-          u.name.toLowerCase().includes(search.toLowerCase()) ||
-          u.email.toLowerCase().includes(search.toLowerCase()),
+          (u.username || "").toLowerCase().includes(search.toLowerCase()) ||
+          (u.email || "").toLowerCase().includes(search.toLowerCase()),
       ),
     [users, search],
   );
-
-  const toggleStatus = (id) => {
-    // TODO: api.patch(`/api/users/${id}`, { status })
-    setUsers((prev) =>
-      prev.map((u) =>
-        u.id === id
-          ? { ...u, status: u.status === "Active" ? "Blocked" : "Active" }
-          : u,
-      ),
-    );
-  };
 
   return (
     <div className="admin-panel">
@@ -84,7 +51,9 @@ export default function ManageUsers() {
           <h2>Customers</h2>
           <p>{users.length} registered accounts</p>
         </div>
-      </div>   <div className="admin-toolbar">
+      </div>
+      {error && <p role="alert">{error}</p>}
+      <div className="admin-toolbar">
         <div className="admin-search">
           <svg viewBox="0 0 24 24" fill="none">
             <circle
@@ -115,46 +84,30 @@ export default function ManageUsers() {
               <th>Joined</th>
               <th>Orders</th>
               <th>Total spent</th>
-              <th>Status</th>
-              <th></th>
             </tr>
           </thead>
           <tbody>
-            {filtered.length === 0 && (
+            {loading ? (
+              <tr><td colSpan={4} className="table-empty">Loading customers…</td></tr>
+            ) : filtered.length === 0 && (
               <tr>
-                <td colSpan={6} className="table-empty">
+                <td colSpan={4} className="table-empty">
                   No customers match your search.
                 </td>
               </tr>
             )}
-            {filtered.map((u) => (
-              <tr key={u.id}>
+            {!loading && filtered.map((u) => {
+              const totals = orderTotals.get(String(u._id)) || { count: 0, spent: 0 };
+              return <tr key={u._id}>
                 <td>
-                  <span className="admin-table__primary">{u.name}</span>
+                  <span className="admin-table__primary">{u.username}</span>
                   <div className="admin-table__muted">{u.email}</div>
                 </td>
-                <td>{u.joined}</td>
-                <td>{u.orders}</td>
-                <td>{money(u.spent)}</td>
-                <td>
-                  <span
-                    className={`badge ${u.status === "Active" ? "badge-active" : "badge-blocked"}`}
-                  >
-                    {u.status}
-                  </span>
-                </td>
-                <td>
-                  <div className="admin-table__actions">
-                    <button
-                      className="btn btn-ghost btn-sm"
-                      onClick={() => toggleStatus(u.id)}
-                    >
-                      {u.status === "Active" ? "Block" : "Unblock"}
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
+                <td>{u.createdAt ? new Date(u.createdAt).toLocaleDateString("en-GB") : "—"}</td>
+                <td>{totals.count}</td>
+                <td>{money(totals.spent)}</td>
+              </tr>;
+            })}
           </tbody>
         </table>
       </div>

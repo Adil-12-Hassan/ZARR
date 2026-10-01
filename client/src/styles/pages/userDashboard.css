@@ -524,7 +524,7 @@
     grid-column: span 2;
 }
 
-.profile-form label {
+.profile-form .form-group label {
     display: block;
     margin-bottom: 8px;
     color: #687269;
@@ -533,18 +533,27 @@
     letter-spacing: 1px;
 }
 
-.profile-form input {
+.profile-form .form-group input {
     width: 100%;
     padding: 13px;
     border: 1px solid #ddd5c8;
     background: #fff;
+    background-color: #fff;
     color: #26342b;
     outline: none;
     font: inherit;
 }
 
-.profile-form input:focus {
+.profile-form .form-group input:focus {
     border-color: #b18b51;
+}
+
+.profile-form .form-group input:-webkit-autofill,
+.profile-form .form-group input:-webkit-autofill:hover,
+.profile-form .form-group input:-webkit-autofill:focus {
+    -webkit-text-fill-color: #26342b;
+    -webkit-box-shadow: 0 0 0 1000px #fff inset;
+    caret-color: #26342b;
 }
 
 .empty-account-panel {

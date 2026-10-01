@@ -109,6 +109,8 @@ const Register = () => {
                     type="password"
                     id="password"
                     name="password"
+                    minLength={8}
+                    maxLength={72}
                     placeholder="Enter your password"
                     autoComplete="new-password"
                     required

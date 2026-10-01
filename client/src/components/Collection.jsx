@@ -1,71 +1,56 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../global.css";
 import "../styles/components/collection.css";
-import watch1 from "../assets/watch1.jpg"
-import watch2 from "../assets/watch2.jpg"
-import watch3 from "../assets/watch3.jpg"
-import watch4 from "../assets/watch4.jpg"
+import { productAPI, subscribeToProductUpdates } from "../api/api";
 
 function Collection() {
+    const [products, setProducts] = useState([]);
+
+    useEffect(() => {
+        let isMounted = true;
+        async function load() {
+            try {
+                const data = await productAPI.getAll("?page=1");
+                if (isMounted) setProducts(data.slice(0, 4));
+            } catch {
+                if (isMounted) setProducts([]);
+            }
+        }
+        load();
+        const unsubscribe = subscribeToProductUpdates(load);
+        return () => { isMounted = false; unsubscribe(); };
+    }, []);
+
     return (
-        <section className="collection">         {/* Collection Header */}
+        <section className="collection">
             <div className="collection-header">
                 <span className="collection-label">OUR COLLECTION</span>
                 <h2 className="collection-heading">CRAFTED FOR EVERY MOMENT</h2>
                 <div className="collection-divider"></div>
             </div>
-            {/* Collection Products */}
+
             <div className="collection-grid">
-                {/* Product 01 */}
-                <div className="product-card">
-                    <div className="product-image-wrapper">
-                        <span className="product-badge">NEW</span>
-                        <img src={watch1} alt="ZARR Heritage Automatic" className="product-image"/>
+                {products.length === 0 ? (
+                    <p style={{ gridColumn: "1 / -1", textAlign: "center" }}>No featured products available yet.</p>
+                ) : products.map((product) => (
+                    <div className="product-card" key={product._id || product.id}>
+                        <div className="product-image-wrapper">
+                            {product.isNewArrival && <span className="product-badge">NEW</span>}
+                            <img src={product.image || product.images?.[0]} alt={product.name} className="product-image" />
+                        </div>
+                        <div className="product-info">
+                            <h3 className="product-name">{product.name}</h3>
+                            <p className="product-price">PKR {Number(product.price || 0).toLocaleString()}</p>
+                            <a href="/collection" className="product-link">VIEW DETAILS<span>→</span></a>
+                        </div>
                     </div>
-                    <div className="product-info">
-                        <h3 className="product-name">ZARR HERITAGE<br />AUTOMATIC</h3>
-                        <p className="product-price">PKR 89,500</p>
-                        <a href="/collection" className="product-link">VIEW DETAILS<span>→</span></a>
-                    </div>
-                </div>
-                {/* Product 02 */}
-                <div className="product-card">
-                    <div className="product-image-wrapper">
-                        <img src={watch2} alt="ZARR Chrono Elegance" className="product-image"/>
-                    </div>
-                    <div className="product-info">
-                        <h3 className="product-name">ZARR CHRONO<br />ELEGANCE</h3>
-                        <p className="product-price">PKR 95,000</p>
-                        <a href="/collection" className="product-link">VIEW DETAILS<span>→</span></a>
-                    </div>
-                </div>
-                {/* Product 03 */}
-                <div className="product-card">
-                    <div className="product-image-wrapper">
-                        <img src={watch3} alt="ZARR Vanguard Black Edition" className="product-image"/>
-                    </div>
-                    <div className="product-info">
-                        <h3 className="product-name">ZARR VANGUARD<br />BLACK EDITION</h3>
-                        <p className="product-price">PKR 99,500</p>
-                        <a href="/collection" className="product-link">VIEW DETAILS<span>→</span></a>
-                    </div>
-                </div>
-                {/* Product 04 */}
-                <div className="product-card">
-                    <div className="product-image-wrapper">
-                        <img src={watch4} alt="ZARR Classic Moonphase" className="product-image"/>
-                    </div>
-                    <div className="product-info">
-                        <h3 className="product-name">ZARR CLASSIC<br />MOONPHASE</h3>
-                        <p className="product-price">PKR 87,000</p>
-                        <a href="/collection" className="product-link">VIEW DETAILS <span>→</span></a>
-                    </div>
-                </div>
+                ))}
             </div>
-            {/* Browse All Watches */}
+
             <div className="collection-footer">
                 <a href="/collection" className="browse-button">
-                    BROWSE ALL WATCHES<span>→</span></a>
+                    BROWSE ALL WATCHES<span>→</span>
+                </a>
             </div>
         </section>
     );

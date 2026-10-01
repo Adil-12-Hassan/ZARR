@@ -1,105 +1,11 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import "../global.css";
-import "../styles/pages/collectionPage.css"
-import watch1 from "../assets/watch1.jpg";
-import watch2 from "../assets/watch2.jpg";
-import watch3 from "../assets/watch3.jpg";
-import watch4 from "../assets/watch4.jpg";
+import "../styles/pages/collectionPage.css";
 import useCartStore from "../store/cartStore";
-
-const products = [
-    {
-        id: 1,
-        name: "ZARR Heritage Automatic",
-        price: 89500,
-        gender: "Men",
-        category: "Automatic",
-        movement: "Automatic",
-        material: "Gold",
-        color: "Green",
-        image: watch1,
-        isNew: true,
-    },
-    {
-        id: 2,
-        name: "ZARR Chrono Elegance",
-        price: 95000,
-        gender: "Men",
-        category: "Chronograph",
-        movement: "Automatic",
-        material: "Stainless Steel",
-        color: "Black",
-        image: watch2,
-    },
-    {
-        id: 3,
-        name: "ZARR Vanguard Black Edition",
-        price: 99500,
-        gender: "Men",
-        category: "Chronograph",
-        movement: "Automatic",
-        material: "Black Steel",
-        color: "Black",
-        image: watch3,
-    },
-    {
-        id: 4,
-        name: "ZARR Classic Moonphase",
-        price: 87000,
-        gender: "Men",
-        category: "Classic",
-        movement: "Automatic",
-        material: "Gold",
-        color: "White",
-        image: watch4,
-    },
-    {
-        id: 5,
-        name: "ZARR Elegance Lady",
-        price: 72000,
-        gender: "Women",
-        category: "Classic",
-        movement: "Quartz",
-        material: "Gold",
-        color: "Green",
-        image: watch1,
-    },
-    {
-        id: 6,
-        name: "ZARR Lumiere Collection",
-        price: 78500,
-        gender: "Women",
-        category: "Classic",
-        movement: "Automatic",
-        material: "Stainless Steel",
-        color: "White",
-        image: watch2,
-    },
-    {
-        id: 7,
-        name: "ZARR Aurora Rose Gold",
-        price: 85000,
-        gender: "Women",
-        category: "Luxury",
-        movement: "Automatic",
-        material: "Rose Gold",
-        color: "Green",
-        image: watch3,
-    },
-    {
-        id: 8,
-        name: "ZARR Bella Diamond",
-        price: 75000,
-        gender: "Women",
-        category: "Luxury",
-        movement: "Quartz",
-        material: "Stainless Steel",
-        color: "White",
-        image: watch4,
-    },
-];
+import { productAPI, subscribeToProductUpdates } from "../api/api";
+import { useAuth } from "../context/AuthContext";
 
 function FilterIcon() {
     return (
@@ -139,20 +45,55 @@ function BagIcon() {
 }
 
 function CollectionPage() {
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+    const [selectedPage, setSelectedPage] = useState(1);
     const [gender, setGender] = useState("All");
     const [sort, setSort] = useState("featured");
-    const addToCart = useCartStore((state) => state.addToCart); const [filters, setFilters] = useState({
+    const addToCart = useCartStore((state) => state.addToCart);
+    const { isAuthenticated } = useAuth();
+    const [filters, setFilters] = useState({
         category: "",
         movement: "",
         material: "",
         price: "",
         color: "",
-    }); const updateFilter = (name, value) => {
+    });
+
+    useEffect(() => {
+        let isMounted = true;
+        const loadProducts = async () => {
+            try {
+                const data = await productAPI.getAll(`?page=${selectedPage}`);
+                if (isMounted) setProducts(data);
+                if (isMounted) setError("");
+            } catch (err) {
+                if (isMounted) setError(err.message || "Unable to load products.");
+            } finally {
+                if (isMounted) setLoading(false);
+            }
+        };
+
+        async function fetchProducts() {
+            setLoading(true);
+            setError("");
+            await loadProducts();
+        }
+
+        fetchProducts();
+        const unsubscribe = subscribeToProductUpdates(loadProducts);
+        return () => { isMounted = false; unsubscribe(); };
+    }, [selectedPage]);
+
+    const updateFilter = (name, value) => {
         setFilters((previous) => ({
             ...previous,
             [name]: value,
         }));
-    }; const clearFilters = () => {
+    };
+
+    const clearFilters = () => {
         setFilters({
             category: "",
             movement: "",
@@ -162,73 +103,66 @@ function CollectionPage() {
         });
         setGender("All");
         setSort("featured");
-    }; const handleAddToCart = (product) => {
-        const isLoggedIn = Boolean(localStorage.getItem("zarrUser"));     if (!isLoggedIn) {
+    };
+
+    const handleAddToCart = (product) => {
+        if (!isAuthenticated) {
             window.alert("Please log in before adding items to your cart.");
             return;
-        }     addToCart(product);
-    }; const filteredProducts = useMemo(() => {
+        }
+        addToCart({
+            ...product,
+            id: product._id || product.id,
+            image: product.image || product.images?.[0],
+        });
+        window.dispatchEvent(new Event("zarr:open-cart"));
+    };
+
+    const filteredProducts = useMemo(() => {
         let result = [...products];
-        // Gender
+
         if (gender !== "All") {
-            result = result.filter(
-                (product) => product.gender === gender
-            );
+            result = result.filter((product) => product.gender === gender);
         }
-        // Category
+
         if (filters.category) {
-            result = result.filter(
-                (product) => product.category === filters.category
-            );
+            result = result.filter((product) => product.category === filters.category);
         }
-        // Movement
+
         if (filters.movement) {
-            result = result.filter(
-                (product) => product.movement === filters.movement
-            );
+            result = result.filter((product) => product.movement === filters.movement);
         }
-        // Material
+
         if (filters.material) {
-            result = result.filter(
-                (product) => product.material === filters.material
-            );
+            result = result.filter((product) => product.material === filters.material);
         }
-        // Color
+
         if (filters.color) {
-            result = result.filter(
-                (product) => product.color === filters.color
-            );
+            result = result.filter((product) => product.color === filters.color);
         }
-        // Price
+
         if (filters.price) {
             result = result.filter((product) => {
-                if (filters.price === "under-80000") {
-                    return product.price < 80000;
-                }
-                if (filters.price === "80000-90000") {
-                    return product.price >= 80000 && product.price <= 90000;
-                }
-                if (filters.price === "above-90000") {
-                    return product.price > 90000;
-                }
+                const price = Number(product.price || 0);
+                if (filters.price === "under-80000") return price < 80000;
+                if (filters.price === "80000-90000") return price >= 80000 && price <= 90000;
+                if (filters.price === "above-90000") return price > 90000;
                 return true;
             });
         }
-        // Sorting
+
         if (sort === "price-low") {
-            result.sort((a, b) => a.price - b.price);
+            result.sort((a, b) => Number(a.price || 0) - Number(b.price || 0));
+        } else if (sort === "price-high") {
+            result.sort((a, b) => Number(b.price || 0) - Number(a.price || 0));
+        } else if (sort === "newest") {
+            result.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
         }
-        if (sort === "price-high") {
-            result.sort((a, b) => b.price - a.price);
-        }
-        if (sort === "name") {
-            result.sort((a, b) => a.name.localeCompare(b.name));
-        }
-        if (sort === "newest") {
-            result.sort((a, b) => Number(b.isNew) - Number(a.isNew));
-        }
+
         return result;
-    }, [gender, filters, sort]); return (
+    }, [products, gender, filters, sort]);
+
+    return (
         <>
             <Navbar />
             <main className="shop-page">
@@ -327,25 +261,40 @@ function CollectionPage() {
                             </div>
                             <button className="clear-filters" onClick={clearFilters}><CloseIcon />CLEAR ALL</button>
                         </div>
-                        {/* PRODUCT GRID */}
-                        <div className="products-grid">
-                            {filteredProducts.map((product) => (
-                                <article className="product-card" key={product.id}>
-                                    <div className="product-image-wrapper">
-                                        {product.isNew && (<span className="new-badge">NEW</span>)}
-                                        <img src={product.image} alt={product.name} />
-                                    </div>
-                                    <div className="product-info">
-                                        <h2>{product.name}</h2>
-                                        <p className="product-price">PKR{" "}{product.price.toLocaleString()}</p>
-                                    </div>
-                                    <div className="product-actions">
-                                        <button className="details-button">VIEW DETAILS</button>
-                                        <button className="cart-button" aria-label={`Add ${product.name} to cart`} onClick={() => handleAddToCart(product)}><BagIcon /></button>
-                                    </div>
-                                </article>
-                            ))}
-                        </div>
+                        {error && (
+                            <div className="empty-products">
+                                <h2>Unable to load products</h2>
+                                <p>{error}</p>
+                            </div>
+                        )}
+
+                        {loading && !error && (
+                            <div className="empty-products">
+                                <h2>Loading products...</h2>
+                                <p>Please wait while the catalog refreshes.</p>
+                            </div>
+                        )}
+
+                        {!loading && !error && (
+                            <div className="products-grid">
+                                {filteredProducts.map((product) => (
+                                    <article className="product-card" key={product._id || product.id}>
+                                        <div className="product-image-wrapper">
+                                            {product.isNewArrival && (<span className="new-badge">NEW</span>)}
+                                            <img src={product.image || product.images?.[0]} alt={product.name} />
+                                        </div>
+                                        <div className="product-info">
+                                            <h2>{product.name}</h2>
+                                            <p className="product-price">PKR{" "}{Number(product.price || 0).toLocaleString()}</p>
+                                        </div>
+                                        <div className="product-actions">
+                                            <button className="details-button">VIEW DETAILS</button>
+                                            <button className="cart-button" aria-label={`Add ${product.name} to cart`} onClick={() => handleAddToCart(product)}><BagIcon /></button>
+                                        </div>
+                                    </article>
+                                ))}
+                            </div>
+                        )}
                         {/* EMPTY STATE */}
                         {filteredProducts.length === 0 && (
                             <div className="empty-products">
@@ -355,15 +304,19 @@ function CollectionPage() {
                             </div>
                         )}
                         {/* PAGINATION */}
-                        {filteredProducts.length > 0 && (
+                        {!loading && !error && filteredProducts.length > 0 && (
                             <div className="pagination">
-                                <button className="pagination-arrow">‹</button>
-                                <button className="pagination-number active">1</button>
-                                <button className="pagination-number">2</button>
-                                <button className="pagination-number">3</button>
-                                <button className="pagination-number">4</button>
-                                <button className="pagination-number">5</button>
-                                <button className="pagination-arrow">›</button>
+                                <button className="pagination-arrow" onClick={() => setSelectedPage((page) => Math.max(1, page - 1))}>‹</button>
+                                {[1,2,3,4,5].map((pageNumber) => (
+                                    <button
+                                        key={pageNumber}
+                                        className={`pagination-number ${selectedPage === pageNumber ? "active" : ""}`}
+                                        onClick={() => setSelectedPage(pageNumber)}
+                                    >
+                                        {pageNumber}
+                                    </button>
+                                ))}
+                                <button className="pagination-arrow" onClick={() => setSelectedPage((page) => Math.min(5, page + 1))}>›</button>
                             </div>
                         )}
                     </div>

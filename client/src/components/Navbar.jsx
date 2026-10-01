@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ZARR from "../assets/ZARR.png";
 import "../styles/components/navbar.css";
 import "../../src/global.css";
@@ -15,7 +15,15 @@ function Navbar() {
     const cartCount = items.reduce(
         (total, item) => total + item.quantity,
         0
-    ); return (
+    );
+
+    useEffect(() => {
+        const openCart = () => setIsCartOpen(true);
+        window.addEventListener("zarr:open-cart", openCart);
+        return () => window.removeEventListener("zarr:open-cart", openCart);
+    }, []);
+
+    return (
         <>
             {/* =========================
                 NAVBAR

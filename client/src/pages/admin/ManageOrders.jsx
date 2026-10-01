@@ -2,15 +2,32 @@ import { useMemo, useState } from "react";
 import { useOrders } from "../../context/OrdersContext";
 import "../../styles/components/admin-ui.css";
 
-const STATUSES = ["Received", "Processing", "Delivered", "Cancelled"];
+const STATUSES = ["Pending", "Confirmed", "Processing", "Shipped", "Delivered", "Cancelled"];
+const NEXT_STATUSES = {
+  Pending: ["Confirmed", "Processing", "Cancelled"],
+  Confirmed: ["Processing", "Cancelled"],
+  Processing: ["Shipped", "Cancelled"],
+  Shipped: ["Delivered"],
+  Delivered: [],
+  Cancelled: [],
+};
 const STATUS_BADGE = {
-  Received: "badge-received",
+  Pending: "badge-received",
+  Confirmed: "badge-received",
   Processing: "badge-processing",
+  Shipped: "badge-processing",
   Delivered: "badge-delivered",
   Cancelled: "badge-cancelled",
 };
 
-const money = (n) => `PKR ${n.toLocaleString()}`;
+const money = (n) => `PKR ${Number(n || 0).toLocaleString()}`;
+
+const orderId = (order) => String(order._id || order.id || "");
+const customerName = (order) => order.shippingAddress?.fullName || order.user?.username || order.customer || "Customer";
+const customerEmail = (order) => order.shippingAddress?.email || order.user?.email || order.email || "";
+const itemSummary = (order) => Array.isArray(order.items)
+  ? order.items.map((item) => item?.name).filter(Boolean).join(", ") || "—"
+  : order.items || "—";
 
 export default function ManageOrders() {
   const { orders, updateStatus } = useOrders();
@@ -19,9 +36,9 @@ export default function ManageOrders() {
 
   const filtered = useMemo(() => {
     return orders.filter((o) => {
-      const matchesSearch =
-        o.id.toLowerCase().includes(search.toLowerCase()) ||
-        o.customer.toLowerCase().includes(search.toLowerCase());
+      const query = search.trim().toLowerCase();
+      const matchesSearch = [orderId(o), customerName(o), customerEmail(o)]
+        .some((value) => value.toLowerCase().includes(query));
       const matchesStatus = statusFilter === "All" || o.status === statusFilter;
       return matchesSearch && matchesStatus;
     });
@@ -64,25 +81,25 @@ export default function ManageOrders() {
               <tr><td colSpan={6} className="table-empty">No orders match your search.</td></tr>
             )}
             {filtered.map((o) => (
-              <tr key={o.id}>
-                <td className="admin-table__primary">{o.id}</td>
+              <tr key={orderId(o)}>
+                <td className="admin-table__primary">#{orderId(o).slice(-6).toUpperCase()}</td>
                 <td>
-                  {o.customer}
-                  <div className="admin-table__muted">{o.email}</div>
+                  {customerName(o)}
+                  <div className="admin-table__muted">{customerEmail(o)}</div>
                 </td>
-                <td>{o.items}</td>
+                <td>{itemSummary(o)}</td>
                 <td>{money(o.total)}</td>
-                <td>{o.date}</td>
+                <td>{o.createdAt ? new Date(o.createdAt).toLocaleDateString("en-GB") : o.date || "—"}</td>
                 <td>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                    <span className={`badge ${STATUS_BADGE[o.status]}`}>{o.status}</span>
+                    <span className={`badge ${STATUS_BADGE[o.status] || "badge-received"}`}>{o.status || "Pending"}</span>
                     <select
                       className="admin-select"
                       style={{ padding: "5px 8px", fontSize: 12 }}
-                      value={o.status}
-                      onChange={(e) => updateStatus(o.id, e.target.value)}
+                      value={o.status || "Pending"}
+                      onChange={(e) => updateStatus(orderId(o), e.target.value)}
                     >
-                      {STATUSES.map((s) => <option key={s}>{s}</option>)}
+                      {[o.status || "Pending", ...(NEXT_STATUSES[o.status || "Pending"] || [])].map((s) => <option key={s}>{s}</option>)}
                     </select>
                   </div>
                 </td>
