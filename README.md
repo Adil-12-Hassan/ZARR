@@ -12,6 +12,7 @@
 - Browse the watch collection, filter and sort products, and manage a cart.
 - Create an account, check out with Cash on Delivery, and manage orders, addresses, and a wishlist.
 - Use the protected admin workspace to manage products, orders, users, and customer messages.
+- Publish ZARR Journal articles from the admin workspace, with title-based slugs and optional links to original posts.
 - Authenticate with JWTs, hashed passwords, role checks, rate limits, input sanitization, and security headers.
 
 ## 🧭 Project map

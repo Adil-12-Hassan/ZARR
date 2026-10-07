@@ -1,5 +1,7 @@
 import { useState } from "react";
 import PasswordInput from "../../components/PasswordInput";
+import { userAPI } from "../../api/api";
+import { useAuth } from "../../context/AuthContext";
 import "../../styles/components/admin-ui.css";
 import "../../styles/pages/adminSetting.css";
 
@@ -45,9 +47,10 @@ function Toggle({ checked, onChange, label }) {
 }
 
 export default function AdminSettings() {
-  const [store, setStore] = useState(INITIAL_STORE);
-  const [shipping, setShipping] = useState(INITIAL_SHIPPING);
-  const [notifications, setNotifications] = useState(INITIAL_NOTIFICATIONS);
+  const { logout } = useAuth();
+  const [store, setStore] = useState(() => JSON.parse(localStorage.getItem("zarr_admin_store") || "null") || INITIAL_STORE);
+  const [shipping, setShipping] = useState(() => JSON.parse(localStorage.getItem("zarr_admin_shipping") || "null") || INITIAL_SHIPPING);
+  const [notifications, setNotifications] = useState(() => JSON.parse(localStorage.getItem("zarr_admin_notifications") || "null") || INITIAL_NOTIFICATIONS);
   const [passwords, setPasswords] = useState({
     current: "",
     next: "",
@@ -62,25 +65,29 @@ export default function AdminSettings() {
 
   const handleStoreSubmit = (e) => {
     e.preventDefault();
-    // TODO: api.put("/api/settings/store", store)
+    localStorage.setItem("zarr_admin_store", JSON.stringify(store));
     flashSaved("Store details saved");
   };
 
   const handleShippingSubmit = (e) => {
     e.preventDefault();
-    // TODO: api.put("/api/settings/shipping", shipping)
+    localStorage.setItem("zarr_admin_shipping", JSON.stringify(shipping));
     flashSaved("Shipping & payment settings saved");
   };
 
-  const handlePasswordSubmit = (e) => {
+  const handlePasswordSubmit = async (e) => {
     e.preventDefault();
     if (passwords.next !== passwords.confirm) {
       alert("New password and confirmation don't match.");
       return;
     }
-    // TODO: api.post("/api/settings/change-password", passwords)
-    setPasswords({ current: "", next: "", confirm: "" });
-    flashSaved("Password updated");
+    try {
+      await userAPI.changePassword({ currentPassword: passwords.current, newPassword: passwords.next });
+      logout();
+      window.location.assign("/admin/login");
+    } catch (err) {
+      setSavedBanner(err.message || "Unable to update password");
+    }
   };
 
   return (

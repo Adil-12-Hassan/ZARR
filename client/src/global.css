@@ -105,3 +105,10 @@ img {
     transition-duration: 0.01ms !important;
   }
 }
+.legal-page { max-width: 900px; min-height: 55vh; margin: 80px auto; padding: 0 28px; color: #24211d; }
+.legal-page > span { color: #9c8148; font-size: 12px; letter-spacing: .16em; }
+.legal-page h1 { margin: 12px 0; font-size: clamp(36px, 6vw, 58px); }
+.legal-page > p { font-size: 18px; line-height: 1.7; color: #666; }
+.legal-page section { margin: 36px 0; }
+.legal-page section h2 { font-size: 21px; }
+.legal-page section p { color: #666; line-height: 1.8; }

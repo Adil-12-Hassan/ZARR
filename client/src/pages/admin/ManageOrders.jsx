@@ -2,14 +2,13 @@ import { useMemo, useState } from "react";
 import { useOrders } from "../../context/OrdersContext";
 import "../../styles/components/admin-ui.css";
 
-const STATUSES = ["Pending", "Confirmed", "Processing", "Shipped", "Delivered", "Cancelled"];
+const STATUSES = ["Pending", "Confirmed", "Processing", "Shipped", "Delivered"];
 const NEXT_STATUSES = {
-  Pending: ["Confirmed", "Processing", "Cancelled"],
-  Confirmed: ["Processing", "Cancelled"],
-  Processing: ["Shipped", "Cancelled"],
-  Shipped: ["Delivered"],
-  Delivered: [],
-  Cancelled: [],
+  Pending: ["Confirmed", "Processing", "Shipped", "Delivered"],
+  Confirmed: ["Pending", "Processing", "Shipped", "Delivered"],
+  Processing: ["Pending", "Confirmed", "Shipped", "Delivered"],
+  Shipped: ["Pending", "Confirmed", "Processing", "Delivered"],
+  Delivered: ["Pending", "Confirmed", "Processing", "Shipped"],
 };
 const STATUS_BADGE = {
   Pending: "badge-received",
@@ -39,7 +38,7 @@ export default function ManageOrders() {
       const query = search.trim().toLowerCase();
       const matchesSearch = [orderId(o), customerName(o), customerEmail(o)]
         .some((value) => value.toLowerCase().includes(query));
-      const matchesStatus = statusFilter === "All" || o.status === statusFilter;
+      const matchesStatus = statusFilter === "All" ? o.status !== "Cancelled" : o.status === statusFilter;
       return matchesSearch && matchesStatus;
     });
   }, [orders, search, statusFilter]);

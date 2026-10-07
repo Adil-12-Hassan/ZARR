@@ -84,6 +84,7 @@ All routes are prefixed with `/api`. Protected routes require a bearer token in 
 | Health | `GET /api/health` |
 | Auth | `POST /api/auth/register`, `/login`, `/admin/login`; `GET /api/auth/me`; `POST /api/auth/logout` |
 | Products | `GET /api/products`, `GET /api/products/:id`; admin `POST`, `PUT`, and `DELETE` routes |
+| Articles | Public `GET /api/articles` and `GET /api/articles/:slug`; admin `GET /api/articles/admin`, `POST /api/articles`, `PUT /api/articles/:id`, and `DELETE /api/articles/:id` |
 | Orders | `POST /api/orders`, `GET /api/orders/my`, admin list and status routes, customer order and cancellation routes |
 | Accounts | Profile, password, wishlist, and address routes under `/api/users` |
 | Messages | Public `POST /api/messages`; admin list, read, and delete routes |

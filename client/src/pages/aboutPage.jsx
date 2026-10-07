@@ -10,12 +10,24 @@ function AboutPage() {
             <main className="about-page">
                 {/* ABOUT HERO*/}
                 <section className="about-hero">
-                    <div className="about-hero-content">
-                        <span className="about-eyebrow">ABOUT ZARR</span>
-                        <h1>BUILT ON PASSION.<br /><span>DRIVEN BY PURPOSE.</span></h1>
-                        <div className="about-line"></div>
-                        <p> ZARR was founded with a singular vision  - to
-                            timepieces that embody the perfect balance of imeless elegance and modern precision. Every watch we craft is a reflection of our dedication to quality, craftsmanship, and the pursuit of excellence.</p>
+                    <div className="about-hero-layout">
+                        <div className="about-hero-content">
+                            <span className="about-eyebrow">ABOUT ZARR</span>
+                            <h1>BUILT ON PASSION.<br /><span>DRIVEN BY PURPOSE.</span></h1>
+                            <div className="about-line"></div>
+                            <p>ZARR was founded with a singular vision: to create timepieces that balance timeless elegance with modern precision. Every watch reflects our dedication to quality, craftsmanship, and the pursuit of excellence.</p>
+                        </div>
+                        <figure className="about-hero-media">
+                            <img
+                                src="https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?auto=format&fit=crop&w=1200&q=85"
+                                alt="Precision-crafted ZARR timepiece"
+                                fetchPriority="high"
+                            />
+                            <figcaption>
+                                <span>THE ART OF TIME</span>
+                                <span>EST. WITH PURPOSE</span>
+                            </figcaption>
+                        </figure>
                     </div>
                 </section>
                 {/* BRAND PILLARS */}
@@ -157,7 +169,7 @@ function AboutPage() {
                     {/* HAND FINISHED COMPONENTS */}
                     <article className="craft-item">
                         <div className="craft-image">
-                            <img src="https://images.unsplash.com/photo-1619134778706-c9e7b92d4a1a?auto=format&fit=crop&w=1100&q=85" alt="ZARR master watchmaker working on a timepiece" />
+                            <img src="https://images.unsplash.com/photo-1745506264483-b3a1ba5fb311?auto=format&fit=crop&w=1100&q=85" alt="A watchmaker carefully repairing a timepiece" loading="lazy" decoding="async" />
                             <span>A</span>
                         </div>
                         <div className="craft-content">

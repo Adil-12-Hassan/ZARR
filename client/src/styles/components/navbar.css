@@ -47,3 +47,6 @@
   .navbar-action { width: 34px; height: 38px; }
   .navbar-toggle { width: 36px; height: 38px; }
 }
+.navbar-search { position: absolute; right: 5%; top: calc(100% + 8px); z-index: 30; display: flex; gap: 8px; padding: 12px; background: #fff; box-shadow: 0 8px 24px #0002; }
+.navbar-search input { min-width: 220px; padding: 10px; border: 1px solid #ddd; }
+.navbar-search button { padding: 0 14px; border: 0; background: #b49a58; color: #fff; }

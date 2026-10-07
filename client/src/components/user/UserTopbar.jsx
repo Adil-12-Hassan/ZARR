@@ -1,15 +1,17 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 function Topbar({ onMenuClick }) {
     const { user } = useAuth();
+    const { pathname } = useLocation();
+    const pageTitle = pathname === "/dashboard" ? "Profile" : pathname.startsWith("/dashboard/settings") ? "Settings" : "Dashboard";
     return (
         <header className="user-topbar">
             <div className="topbar-left">
                 <button className="mobile-menu-button" onClick={onMenuClick} aria-label="Open menu">☰</button>             <div className="topbar-title">
                     <span>ACCOUNT</span>
-                    <h1>Dashboard</h1>
+                    <h1>{pageTitle}</h1>
                 </div>
             </div>
             <div className="topbar-actions">

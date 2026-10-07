@@ -416,7 +416,7 @@
     border-top: 1px solid rgba(193, 155, 70, 0.16);
 }
 
-.details-button,
+.wishlist-button,
 .cart-button {
     border: none;
     background: transparent;
@@ -427,14 +427,14 @@
         color 0.25s ease;
 }
 
-.details-button {
+.wishlist-button {
     border-right: 1px solid rgba(193, 155, 70, 0.16);
     font-family: inherit;
     font-size: 10px;
     letter-spacing: 1px;
 }
 
-.details-button:hover,
+.wishlist-button:hover,
 .cart-button:hover {
     background: rgba(201, 163, 78, 0.07);
     color: #e6c875;
@@ -670,7 +670,7 @@
         font-size: 11px;
     }
 
-    .details-button {
+    .wishlist-button {
         font-size: 9px;
         letter-spacing: .4px;
     }

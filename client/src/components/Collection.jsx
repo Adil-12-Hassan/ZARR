@@ -40,7 +40,6 @@ function Collection() {
                         <div className="product-info">
                             <h3 className="product-name">{product.name}</h3>
                             <p className="product-price">PKR {Number(product.price || 0).toLocaleString()}</p>
-                            <a href="/collection" className="product-link">VIEW DETAILS<span>→</span></a>
                         </div>
                     </div>
                 ))}

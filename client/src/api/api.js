@@ -89,6 +89,7 @@ export const orderAPI = {
     getById: (id) => request(`/orders/${id}`),
     updateStatus: (id, status) =>
         request(`/orders/${id}/status`, { method: "PATCH", body: JSON.stringify({ status }) }),
+    cancel: (id) => request(`/orders/${id}/cancel`, { method: "PATCH", body: JSON.stringify({ reason: "Cancelled by customer" }) }),
 };
 
 // Users
@@ -109,4 +110,14 @@ export const messageAPI = {
     getAll: () => request("/messages"),
     markRead: (id) => request(`/messages/${id}/read`, { method: "PATCH" }),
     remove: (id) => request(`/messages/${id}`, { method: "DELETE" }),
+};
+
+// Editorial articles
+export const articleAPI = {
+    getPublished: (limit = 30) => request(`/articles?limit=${encodeURIComponent(limit)}`),
+    getBySlug: (slug) => request(`/articles/${encodeURIComponent(slug)}`),
+    getAllAdmin: () => request("/articles/admin"),
+    create: (body) => request("/articles", { method: "POST", body: JSON.stringify(body) }),
+    update: (id, body) => request(`/articles/${id}`, { method: "PUT", body: JSON.stringify(body) }),
+    remove: (id) => request(`/articles/${id}`, { method: "DELETE" }),
 };

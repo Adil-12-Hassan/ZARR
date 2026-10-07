@@ -11,6 +11,7 @@ The customer-facing React storefront for ZARR, including the watch collection, c
 - Responsive storefront and collection browsing.
 - Cart, Cash on Delivery checkout, and customer account pages.
 - Protected admin dashboard for catalog, order, user, and message management.
+- Editorial Journal backed by MongoDB, with public article pages and admin draft/publish CRUD.
 - Route-level page loading, optimized local imagery, and Vercel deep-link support.
 
 ## 🚀 Start locally

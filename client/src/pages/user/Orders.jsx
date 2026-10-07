@@ -1,10 +1,15 @@
 import React from "react";
+import { orderAPI } from "../../api/api";
 import { useOrders } from "../../context/OrdersContext";
 
 const money = (n) => `PKR ${Number(n).toLocaleString()}`;
 
 function Orders() {
-    const { orders, loading, error } = useOrders();
+    const { orders, loading, error, addOrder } = useOrders();
+    const cancelOrder = async (order) => {
+        try { addOrder(await orderAPI.cancel(order._id)); }
+        catch (err) { window.alert(err.message || "Unable to cancel this order."); }
+    };
 
     return (
         <div className="dashboard-page">
@@ -46,6 +51,7 @@ function Orders() {
                             <span className={`order-status ${order.status?.toLowerCase().replace(" ", "-")}`}>
                                 {order.status}
                             </span>
+                            {["Pending", "Confirmed"].includes(order.status) && <button type="button" onClick={() => cancelOrder(order)}>Cancel order</button>}
                         </div>
                     ))}
                 </div>

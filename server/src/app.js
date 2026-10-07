@@ -8,6 +8,7 @@ import productRoutes from "./routes/productRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import messageRoutes from "./routes/messageRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import articleRoutes from "./routes/articleRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorHandler.js";
 import connectDB from "./config/db.js";
 const app = express();
@@ -21,6 +22,12 @@ if (process.env.NODE_ENV !== "production") {
     if (!clientOrigins.includes(origin)) clientOrigins.push(origin);
   }
 }
+app.get("/", (req, res)=>{
+  res.json({
+    message: "API is running", 
+    status: "success"
+  });
+});
 app.set("trust proxy", process.env.VERCEL === "1" ? 1 : false);
 app.use(cors({
   origin(origin, callback) {
@@ -47,6 +54,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/articles", articleRoutes);
 app.use(notFound);
 app.use(errorHandler);
 export default app;

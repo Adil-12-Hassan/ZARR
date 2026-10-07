@@ -202,3 +202,4 @@
         grid-template-columns: 1fr;
     }
 }
+.footer-toast { position: fixed; z-index: 2000; bottom: 24px; left: 50%; transform: translateX(-50%); padding: 12px 22px; background: #171717; color: #fff; border-radius: 6px; box-shadow: 0 8px 28px #0003; }

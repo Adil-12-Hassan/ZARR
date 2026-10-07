@@ -4,7 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 
 const menuItems = [
     {
-        label: "Overview",
+        label: "Profile",
         path: "/dashboard",
         icon: "⌂",
     },
@@ -22,11 +22,6 @@ const menuItems = [
         label: "Addresses",
         path: "/dashboard/addresses",
         icon: "⌖",
-    },
-    {
-        label: "Profile",
-        path: "/dashboard/profile",
-        icon: "♙",
     },
     {
         label: "Settings",

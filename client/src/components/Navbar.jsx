@@ -4,12 +4,15 @@ import "../styles/components/navbar.css";
 
 import useCartStore from "../store/cartStore";
 import CartSidebar from "./CartSidebar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Navbar() {
     // Cart Sidebar State
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false); // Get Cart Items from Zustand
+    const [searchOpen, setSearchOpen] = useState(false);
+    const [searchText, setSearchText] = useState("");
+    const navigate = useNavigate();
     const items = useCartStore((state) => state.items); // Calculate Total Cart Items
     const cartCount = items.reduce(
         (total, item) => total + item.quantity,
@@ -96,6 +99,7 @@ function Navbar() {
                     <button
                         className="navbar-action"
                         aria-label="Search"
+                        onClick={() => setSearchOpen((open) => !open)}
                     >
                         <i className="fa-solid fa-magnifying-glass"></i>
                     </button>
@@ -121,6 +125,7 @@ function Navbar() {
                         )}
                     </button>
                 </div>
+                {searchOpen && <form className="navbar-search" onSubmit={(event) => { event.preventDefault(); navigate(`/collection?search=${encodeURIComponent(searchText)}`); setSearchOpen(false); }}><input autoFocus aria-label="Search products" placeholder="Search watches" value={searchText} onChange={(event) => setSearchText(event.target.value)} /><button type="submit">Search</button></form>}
             </header>
             {/* =========================
                 CART SIDEBAR

@@ -7,11 +7,11 @@ const TAX_RATE = 0.135;
 const MAX_ORDER_LINES = 30;
 const MAX_ITEM_QUANTITY = 50;
 const ORDER_TRANSITIONS = {
-  Pending: ["Confirmed", "Processing", "Cancelled"],
-  Confirmed: ["Processing", "Cancelled"],
-  Processing: ["Shipped", "Cancelled"],
-  Shipped: ["Delivered"],
-  Delivered: [],
+  Pending: ["Confirmed", "Processing", "Shipped", "Delivered"],
+  Confirmed: ["Pending", "Processing", "Shipped", "Delivered"],
+  Processing: ["Pending", "Confirmed", "Shipped", "Delivered"],
+  Shipped: ["Pending", "Confirmed", "Processing", "Delivered"],
+  Delivered: ["Pending", "Confirmed", "Processing", "Shipped"],
   Cancelled: [],
 };
 

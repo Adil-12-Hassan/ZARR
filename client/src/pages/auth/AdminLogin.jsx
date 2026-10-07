@@ -10,16 +10,17 @@ function AdminLogin() {
   const navigate = useNavigate();
   const { adminLogin, loading } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(""); const formData = new FormData(e.currentTarget);
+    setError("");
+    const formData = new FormData(e.currentTarget);
     const result = await adminLogin({
       email: formData.get("email"),
       password: formData.get("password"),
-    }); if (result.success) {
+    });
+    if (result.success) {
       navigate("/admin");
     } else {
       setError(result.message);
@@ -58,32 +59,31 @@ function AdminLogin() {
               </div>
             </div>
           </div>
-        </section>     {/* LOGIN FORM PANEL */}
+        </section>
+        {/* LOGIN FORM PANEL */}
         <section className="admin-form-panel">
           <div className="admin-form-container">
             <div className="admin-lock-icon">
               <i className="fa-solid fa-shield-halved"></i>
             </div>
             <div className="admin-heading">
-              <h1>ADMIN PANEL</h1>
-              <h2>Secure Login</h2>
+              <h1>ADMINISTRATOR ACCESS</h1>
+              <h2>Welcome back.</h2>
               <span className="heading-line"></span>
               <p>
-                Please sign in with your admin credentials to access the secure
-                dashboard.
+                Sign in with your administrator credentials to continue to the ZARR control room.
               </p>
-            </div>         {error && (
+            </div>
+            {error && (
               <p
-                style={{
-                  color: "red",
-                  marginBottom: "1rem",
-                  fontSize: "0.9rem",
-                  textAlign: "center",
-                }}
+                className="admin-login-error"
+                role="alert"
+                aria-live="assertive"
               >
                 {error}
               </p>
-            )}         <form className="admin-login-form" onSubmit={handleSubmit}>
+            )}
+            <form className="admin-login-form" onSubmit={handleSubmit}>
               <div className="form-group">
                 <label htmlFor="admin-email">ADMIN EMAIL</label>
                 <div className="input-wrapper">
@@ -128,17 +128,6 @@ function AdminLogin() {
                   </button>
                 </div>
               </div>
-              <div className="login-options">
-                <label className="remember-option">
-                  <input
-                    type="checkbox"
-                    checked={rememberMe}
-                    onChange={(e) => setRememberMe(e.target.checked)}
-                  />
-                  <span>Remember me</span>
-                </label>
-                <a href="/forgot-password">Forgot password?</a>
-              </div>
               <button
                 type="submit"
                 className="admin-login-button"
@@ -147,7 +136,12 @@ function AdminLogin() {
                 <span>{loading ? "LOGGING IN..." : "LOGIN"}</span>
                 <i className="fa-solid fa-chevron-right"></i>
               </button>
-            </form>       </div>
+            </form>
+            <p className="admin-login-footnote">
+              <i className="fa-solid fa-lock" aria-hidden="true"></i>
+              Protected administrator session · Sign-in activity is secured.
+            </p>
+          </div>
         </section>
       </main>
       <Footer />

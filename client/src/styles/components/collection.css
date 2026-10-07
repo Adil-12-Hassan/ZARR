@@ -141,32 +141,6 @@
     letter-spacing: 1px;
 }
 
-.product-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 9px;
-    color: #c29d4f;
-    text-decoration: none;
-    font-size: 9px;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    transition: color 0.3s ease;
-}
-
-.product-link span {
-    font-size: 14px;
-    transition: transform 0.3s ease;
-}
-
-.product-link:hover {
-    color: #f1eee5;
-}
-
-.product-link:hover span {
-    transform: translateX(4px);
-}
-
 /* Collection Footer */
 .collection-footer {
     display: flex;

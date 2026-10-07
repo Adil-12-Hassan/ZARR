@@ -1,720 +1,549 @@
 .about-page {
-    --zarr-bg: #07100d;
-    --zarr-bg-soft: #061914;
-    --zarr-gold: #c88a2b;
-    --zarr-gold-light: #e0a84d;
-    --zarr-text: #f1eee7;
-    --zarr-muted: #aaa9a1;
-    --zarr-border: rgba(200, 138, 43, 0.25);
-    background: var(--zarr-bg);
-    color: var(--zarr-text);
-    min-height: 100vh;
-    overflow: hidden;
+  --about-bg: #07100d;
+  --about-panel: #0c1712;
+  --about-panel-raised: #111d17;
+  --about-gold: #c99a52;
+  --about-gold-bright: #e2bd7c;
+  --about-text: #f3f0e8;
+  --about-muted: #aaa99f;
+  --about-rule: rgba(201, 154, 82, 0.22);
+  overflow: clip;
+  background: var(--about-bg);
+  color: var(--about-text);
 }
 
-.about-hero-content,
-.pillar-grid,
-.zarr-legacy>.legacy-timeline,
-.zarr-team>.team-grid,
-.craftsmanship>.craft-item,
-.about-stats>.stats-grid,
-.about-cta {
-    width: min(1200px, 90%);
-    margin-left: auto;
-    margin-right: auto;
+.about-page,
+.about-page * {
+  box-sizing: border-box;
 }
 
+.about-page .about-hero-layout,
+.about-page .pillar-grid,
+.about-page .legacy-timeline,
+.about-page .team-grid,
+.about-page .craft-item,
+.about-page .stats-grid,
+.about-page .about-cta {
+  width: min(1180px, calc(100% - 64px));
+  margin-right: auto;
+  margin-left: auto;
+}
 
-/* HERO  */
+/* Hero: copy and photography are separate grid cells to prevent overlap. */
 .about-hero {
-    min-height: 680px;
-    display: flex;
-    align-items: center;
-    position: relative;
-    background:
-        linear-gradient(90deg,
-            rgba(1, 13, 10, 0.98) 0%,
-            rgba(1, 13, 10, 0.88) 40%,
-            rgba(1, 13, 10, 0.55) 70%,
-            rgba(1, 13, 10, 0.20) 100%),
-        url("https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?auto=format&fit=crop&w=1800&q=85");
-    background-size: cover;
-    background-position: center;
+  padding: clamp(52px, 7vw, 92px) 0;
+  border-bottom: 1px solid var(--about-rule);
+  background:
+    radial-gradient(ellipse at 12% 22%, rgba(201, 154, 82, 0.09), transparent 36%),
+    linear-gradient(145deg, #0c1712 0%, var(--about-bg) 62%);
 }
 
-/* HERO CONTENT */
+.about-hero-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(340px, 0.8fr);
+  align-items: center;
+  gap: clamp(38px, 7vw, 100px);
+}
+
 .about-hero-content {
-    position: relative;
-    z-index: 1;
-    padding-top: 80px;
-    padding-bottom: 80px;
+  min-width: 0;
 }
 
-.about-eyebrow {
-    display: block;
-    color: var(--zarr-gold);
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: 2px;
+.about-hero-media {
+  position: relative;
+  min-width: 0;
+  margin: 0;
+  padding: 12px 12px 0 0;
+}
+
+.about-hero-media::before {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  right: 0;
+  width: 72%;
+  height: 70%;
+  border-top: 1px solid var(--about-gold);
+  border-right: 1px solid var(--about-gold);
+  content: "";
+  pointer-events: none;
+}
+
+.about-hero-media img {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  aspect-ratio: 0.88;
+  object-fit: cover;
+  object-position: center;
+  border: 1px solid var(--about-rule);
+  background: var(--about-panel);
+}
+
+.about-hero-media figcaption {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 2px 0;
+  color: var(--about-muted);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+}
+
+.about-hero-media figcaption span:first-child { color: var(--about-gold-bright); }
+
+.about-eyebrow,
+.about-page .section-heading > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--about-gold-bright);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.about-eyebrow::before,
+.about-page .section-heading > span::before {
+  width: 28px;
+  height: 1px;
+  background: var(--about-gold);
+  content: "";
 }
 
 .about-hero h1 {
-    margin: 18px 0 24px;
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: clamp(42px, 5vw, 72px);
-    line-height: 1.05;
-    font-weight: 400;
-    letter-spacing: -1px;
+  max-width: 850px;
+  margin: 22px 0 26px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(44px, 7.1vw, 88px);
+  font-weight: 400;
+  letter-spacing: -0.045em;
+  line-height: 0.99;
+  text-wrap: balance;
 }
 
 .about-hero h1 span {
-    color: var(--zarr-text);
+  color: var(--about-gold-bright);
 }
 
-.about-line {
-    width: 55px;
-    height: 2px;
-    margin: 25px 0;
-    background: var(--zarr-gold);
+.about-line,
+.gold-line {
+  width: 48px;
+  height: 1px;
+  margin: 28px 0;
+  background: var(--about-gold);
 }
 
 .about-hero p {
-    max-width: 570px;
-    color: var(--zarr-muted);
-    font-size: 15px;
-    line-height: 1.8;
+  max-width: 570px;
+  margin: 0;
+  color: rgba(243, 240, 232, 0.74);
+  font-size: 15px;
+  line-height: 1.9;
 }
 
-
-/*  
-   GENERAL SECTION HEADING
-  */
-
+/* Shared section headings */
 .about-page .section-heading {
-    width: min(900px, 90%);
-    margin: 0 auto;
-    padding: 70px;
-    display: block;
-    border-bottom: none;
-    text-align: center;
+  display: block;
+  width: min(760px, calc(100% - 48px));
+  height: auto;
+  margin: 0 auto;
+  padding: clamp(76px, 9vw, 112px) 0 48px;
+  border: 0;
+  text-align: center;
 }
 
-.about-page .section-heading>span {
-    display: block;
-    color: var(--zarr-gold);
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 2px;
+.about-page .section-heading > span {
+  justify-content: center;
 }
 
 .about-page .section-heading h2 {
-    margin: 12px 0;
-    color: var(--zarr-text);
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: clamp(30px, 4vw, 46px);
-    line-height: 1.15;
-    font-weight: 400;
+  margin: 15px 0 0;
+  color: var(--about-text);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(32px, 4.5vw, 54px);
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  line-height: 1.08;
+  text-wrap: balance;
 }
 
 .about-page .section-heading p {
-    max-width: 600px;
-    margin: 16px auto 0;
-    color: var(--zarr-muted);
-    font-size: 14px;
-    line-height: 1.8;
+  max-width: 580px;
+  margin: 17px auto 0;
+  color: var(--about-muted);
+  font-size: 14px;
+  line-height: 1.8;
 }
 
-
-/*  
-   BRAND PILLARS
-  */
-
+/* Brand pillars */
 .brand-pillars {
-    padding: 55px 0 70px;
-    border-top: 1px solid var(--zarr-border);
+  padding: 38px 0 82px;
+  border-top: 1px solid var(--about-rule);
 }
 
 .pillar-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    border: 1px solid var(--zarr-border);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  overflow: hidden;
+  border: 1px solid var(--about-rule);
+  border-radius: 4px;
+  background: linear-gradient(140deg, rgba(17, 29, 23, 0.7), rgba(7, 16, 13, 0.2));
 }
 
 .pillar-card {
-    min-height: 300px;
-    padding: 45px 30px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    border-right: 1px solid var(--zarr-border);
-    transition:
-        background 0.3s ease,
-        transform 0.3s ease;
+  display: flex;
+  min-height: 265px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 34px 26px;
+  border-right: 1px solid var(--about-rule);
+  text-align: center;
+  transition: background-color 220ms ease;
 }
 
-.pillar-card:last-child {
-    border-right: none;
-}
+.pillar-card:last-child { border-right: 0; }
+.pillar-card:hover { background: rgba(201, 154, 82, 0.055); }
 
-.pillar-card:hover {
-    background: rgba(200, 138, 43, 0.035);
-}
-
-/* ICON */
 .pillar-icon {
-    width: 60px;
-    height: 60px;
-    margin-bottom: 22px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid var(--zarr-gold);
-    border-radius: 50%;
-    color: var(--zarr-gold);
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 25px;
+  display: grid;
+  width: 50px;
+  height: 50px;
+  margin-bottom: 22px;
+  place-items: center;
+  border: 1px solid rgba(201, 154, 82, 0.65);
+  border-radius: 50%;
+  color: var(--about-gold-bright);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 22px;
 }
-
-/*
-    IMPORTANT:
-    JSX uses H2, not H3.
-*/
 
 .pillar-card h2 {
-    margin: 0;
-    color: var(--zarr-gold);
-    font-size: 14px;
-    font-weight: 500;
-    letter-spacing: 1.5px;
+  margin: 0;
+  color: var(--about-gold-bright);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.8px;
 }
 
 .pillar-card p {
-    max-width: 230px;
-    margin: 15px 0 0;
-    color: var(--zarr-muted);
-    font-size: 13px;
-    line-height: 1.8;
+  max-width: 230px;
+  margin: 13px 0 0;
+  color: var(--about-muted);
+  font-size: 12px;
+  line-height: 1.8;
 }
 
-
-/*  
-   ZARR LEGACY
-  */
-
-/*
-    IMPORTANT: JSX:
-        className="zarr-legacy" So this MUST be .zarr-legacy,
-    not .legacy.
-*/
-
-.zarr-legacy {
-    padding-bottom: 80px;
-    border-top: 1px solid var(--zarr-border);
+/* History */
+.zarr-legacy,
+.zarr-team,
+.craftsmanship,
+.about-page > .about-stats {
+  border-top: 1px solid var(--about-rule);
 }
+
+.zarr-legacy { padding-bottom: 100px; }
 
 .legacy-timeline {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 18px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
 }
 
-.legacy-item {
-    min-width: 0;
+.legacy-item { min-width: 0; }
+
+.legacy-image,
+.team-image,
+.craft-image {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--about-rule);
+  background: var(--about-panel);
 }
 
-.legacy-image {
-    width: 100%;
-    aspect-ratio: 1.25;
-    overflow: hidden;
-    border: 1px solid var(--zarr-border);
-    background: var(--zarr-bg-soft);
+.legacy-image { aspect-ratio: 1.08; }
+
+.legacy-image::after,
+.team-image::after {
+  position: absolute;
+  inset: 45% 0 0;
+  background: linear-gradient(transparent, rgba(4, 10, 7, 0.28));
+  content: "";
+  pointer-events: none;
 }
 
-.legacy-image img {
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: cover;
-    transition: transform 0.6s ease;
+.legacy-image img,
+.team-image img,
+.craft-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 650ms cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
-.legacy-item:hover .legacy-image img {
-    transform: scale(1.05);
+.legacy-item:hover .legacy-image img,
+.team-card:hover .team-image img,
+.craft-item:hover .craft-image img {
+  transform: scale(1.045);
 }
 
-.legacy-content {
-    padding: 18px 8px 8px;
+.legacy-content { padding: 20px 2px 0; }
+
+.legacy-year,
+.craft-number {
+  color: var(--about-gold-bright);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
 }
 
-.legacy-year {
-    display: block;
-    color: var(--zarr-gold);
-    font-size: 13px;
-    letter-spacing: 1.5px;
+.legacy-content h3,
+.team-card h3,
+.craft-content h3,
+.about-cta-content h3 {
+  color: var(--about-text);
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 400;
 }
 
-.legacy-content h3 {
-    margin: 10px 0 8px;
-    color: var(--zarr-text);
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 18px;
-    font-weight: 400;
-}
+.legacy-content h3 { margin: 9px 0 7px; font-size: 20px; }
+.legacy-content p { margin: 0; color: var(--about-muted); font-size: 12px; line-height: 1.75; }
 
-.legacy-content p {
-    margin: 0;
-    color: var(--zarr-muted);
-    font-size: 13px;
-    line-height: 1.7;
-}
-
-/* TEAM  */
-/* IMPORTANT:
-    JSX: className="zarr-team"
-    So this MUST be .zarr-team,
-    not .team.
-*/
-.zarr-team {
-    padding-bottom: 85px;
-    border-top: 1px solid var(--zarr-border);
-}
+/* Team */
+.zarr-team { padding-bottom: 108px; }
 
 .team-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 15px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
 }
 
-.team-card {
-    padding-bottom: 8px;
-    text-align: center;
-}
-
-.team-image {
-    width: 100%;
-    aspect-ratio: 0.8;
-    overflow: hidden;
-    border: 1px solid var(--zarr-border);
-    background: var(--zarr-bg-soft);
-}
-
-.team-image img {
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: cover;
-    filter: saturate(0.75);
-    transition:
-        transform 0.6s ease,
-        filter 0.6s ease;
-}
-
-.team-card:hover .team-image img {
-    transform: scale(1.04);
-    filter: saturate(0.95);
-}
+.team-card { min-width: 0; text-align: left; }
+.team-image { aspect-ratio: 0.86; }
+.team-image img { filter: saturate(0.78); }
+.team-card:hover .team-image img { filter: saturate(1); }
 
 .team-role {
-    display: block;
-    margin-top: 18px;
-    color: var(--zarr-gold);
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 1.5px;
+  display: block;
+  margin-top: 19px;
+  color: var(--about-gold-bright);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 1.7px;
+  line-height: 1.6;
 }
 
-.team-card h3 {
-    margin: 8px 0;
-    color: var(--zarr-text);
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 20px;
-    font-weight: 400;
-}
+.team-card h3 { margin: 6px 0 7px; font-size: 22px; }
+.team-card p { max-width: 290px; margin: 0; color: var(--about-muted); font-size: 12px; line-height: 1.75; }
 
-.team-card p {
-    max-width: 250px;
-    margin: 0 auto;
-    color: var(--zarr-muted);
-    font-size: 13px;
-    line-height: 1.6;
-}
-
-/* CRAFTSMANSHIP  */
-.craftsmanship {
-    padding-bottom: 90px;
-    border-top: 1px solid var(--zarr-border);
-}
+/* Craftsmanship */
+.craftsmanship { padding-bottom: 106px; }
 
 .craft-item {
-    margin-bottom: 85px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+  align-items: center;
+  gap: clamp(36px, 7vw, 96px);
+  margin-bottom: 82px;
 }
 
-.craft-item:last-child {
-    margin-bottom: 0;
+.craft-item:last-child { margin-bottom: 0; }
+.craft-item:nth-of-type(even) { grid-template-columns: minmax(280px, 0.8fr) minmax(0, 1.2fr); }
+.craft-item:nth-of-type(even) .craft-image { order: 2; }
+.craft-item:nth-of-type(even) .craft-content { order: 1; }
+
+.craft-image { aspect-ratio: 1.38; }
+
+.craft-image > span {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border: 1px solid rgba(226, 189, 124, 0.65);
+  border-radius: 50%;
+  background: rgba(7, 16, 13, 0.6);
+  color: var(--about-gold-bright);
+  font-family: Georgia, "Times New Roman", serif;
 }
 
-/* IMAGE */
+.craft-content { max-width: 480px; }
+.craft-content h3 { margin: 13px 0 0; font-size: clamp(25px, 3vw, 36px); line-height: 1.14; }
+.craft-content .gold-line { margin: 21px 0; }
+.craft-content p { margin: 0; color: var(--about-muted); font-size: 13px; line-height: 1.9; }
 
-.craft-image {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 2 / 0.9;
-    overflow: hidden;
-    border: 1px solid var(--zarr-border);
-    background: var(--zarr-bg-soft);
-}
-
-.craft-image img {
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: cover;
-    transition: transform 0.7s ease;
-}
-
-.craft-item:hover .craft-image img {
-    transform: scale(1.025);
-}
-
-/* A / B LABEL */
-.craft-image>span {
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    color: var(--zarr-gold);
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 18px;
-}
-
-/* CONTENT */
-.craft-content {
-    max-width: 850px;
-    margin: 38px auto 0;
-    padding: 0 12px;
-    text-align: center;
-}
-
-.craft-number {
-    color: var(--zarr-gold);
-    font-size: 11px;
-    letter-spacing: 2px;
-}
-
-.craft-content h3 {
-    margin: 10px 0 0;
-    color: var(--zarr-text);
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 25px;
-    font-weight: 400;
-}
-
-.gold-line {
-    width: 55px;
-    height: 2px;
-    margin: 20px auto;
-    background: var(--zarr-gold);
-}
-
-.craft-content p {
-    margin: 0;
-    color: var(--zarr-muted);
-    font-size: 14px;
-    line-height: 1.8;
-}
-
-/* STATS  */
-.about-stats {
-    display: block;
-    padding-top: 1px;
-    padding-bottom: 90px;
-    border-top: 1px solid var(--zarr-border);
-}
+/* The ZARR standard */
+.about-page > .about-stats { padding: 0 0 96px; }
+.about-page > .about-stats .section-heading { padding-bottom: 42px; }
 
 .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    border-top: 1px solid var(--zarr-border);
-    border-bottom: 1px solid var(--zarr-border);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  overflow: hidden;
+  border: 1px solid var(--about-rule);
+  border-radius: 4px;
+  background: var(--about-panel);
 }
 
 .stat {
-    min-height: 190px;
-    padding: 35px 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    border-right: 1px solid var(--zarr-border);
+  display: flex;
+  min-height: 185px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 26px 18px;
+  border-right: 1px solid var(--about-rule);
+  text-align: center;
 }
 
-.stat:last-child {
-    border-right: none;
-}
+.stat:last-child { border-right: 0; }
+.stat-icon { margin-bottom: 11px; color: var(--about-gold); font-size: 20px; }
+.stat strong { color: var(--about-text); font-family: Georgia, "Times New Roman", serif; font-size: 42px; font-weight: 400; line-height: 1; }
+.stat > span { margin-top: 10px; color: var(--about-muted); font-size: 9px; font-weight: 600; letter-spacing: 1.5px; }
 
-/* ICON */
-.stat-icon {
-    margin-bottom: 12px;
-    color: var(--zarr-gold);
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 25px;
-}
-
-
-/* NUMBER */
-.stat strong {
-    display: block;
-    color: var(--zarr-text);
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 42px;
-    line-height: 1;
-    font-weight: 400;
-}
-
-/* LABEL */
-.stat>span {
-    display: block;
-    margin-top: 10px;
-    color: var(--zarr-muted);
-    font-size: 11px;
-    letter-spacing: 1.2px;
-}
-
-/* CTA  */
 .about-cta {
-    min-height: 180px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 40px;
-    padding-top: 60px;
+  display: flex;
+  min-height: 210px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  margin-top: 64px !important;
+  padding: 38px clamp(26px, 5vw, 64px);
+  border: 1px solid var(--about-rule);
+  background: radial-gradient(ellipse at 90% 50%, rgba(201, 154, 82, 0.12), transparent 48%), var(--about-panel);
 }
 
-.about-cta-content>span {
-    display: block;
-    color: var(--zarr-gold);
-    font-size: 11px;
-    letter-spacing: 2px;
-}
+.about-cta-content > span { color: var(--about-gold-bright); font-size: 9px; font-weight: 600; letter-spacing: 2px; }
+.about-cta-content h3 { margin: 9px 0; font-size: clamp(26px, 3.4vw, 38px); }
+.about-cta-content p { max-width: 540px; margin: 0; color: var(--about-muted); font-size: 12px; line-height: 1.8; }
 
-.about-cta-content h3 {
-    margin: 8px 0 10px;
-    color: var(--zarr-text);
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 30px;
-    font-weight: 400;
-}
-
-.about-cta-content p {
-    max-width: 500px;
-    margin: 0;
-    color: var(--zarr-muted);
-    font-size: 13px;
-    line-height: 1.7;
-}
-
-/* BUTTON */
 .about-cta-button {
-    flex-shrink: 0;
-    padding: 15px 25px;
-    border: 1px solid var(--zarr-gold);
-    color: var(--zarr-gold);
-    text-decoration: none;
-    font-size: 11px;
-    letter-spacing: 1.2px;
-    transition:
-        background 0.3s ease,
-        color 0.3s ease;
+  display: inline-flex;
+  min-height: 48px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  padding: 0 22px;
+  border: 1px solid var(--about-gold);
+  color: var(--about-gold-bright);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 1.4px;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 180ms ease, color 180ms ease;
 }
 
-.about-cta-button:hover {
-    background: var(--zarr-gold);
-    color: #07110e;
+.about-cta-button:hover,
+.about-cta-button:focus-visible { background: var(--about-gold); color: var(--about-bg); }
+.about-cta-button:focus-visible { outline: 2px solid var(--about-gold-bright); outline-offset: 4px; }
+
+@media (max-width: 980px) {
+  .about-page .about-hero-layout,
+  .about-page .pillar-grid,
+  .about-page .legacy-timeline,
+  .about-page .team-grid,
+  .about-page .craft-item,
+  .about-page .stats-grid,
+  .about-page .about-cta { width: min(100% - 48px, 760px); }
+
+  .pillar-grid,
+  .legacy-timeline,
+  .team-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  .pillar-card:nth-child(2) { border-right: 0; }
+  .pillar-card:nth-child(-n + 2) { border-bottom: 1px solid var(--about-rule); }
+  .pillar-card:nth-child(3) { border-right: 1px solid var(--about-rule); }
+  .legacy-timeline { row-gap: 36px; }
+  .team-grid { column-gap: 24px; row-gap: 38px; }
+  .craft-item,
+  .craft-item:nth-of-type(even) { grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr); gap: 36px; }
+  .craft-item:nth-of-type(even) .craft-image,
+  .craft-item:nth-of-type(even) .craft-content { order: initial; }
+
+  .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stat:nth-child(2) { border-right: 0; }
+  .stat:nth-child(-n + 2) { border-bottom: 1px solid var(--about-rule); }
 }
 
-/* TABLET */
-@media (max-width: 1000px) {
+@media (max-width: 620px) {
+  .about-page .about-hero-layout,
+  .about-page .pillar-grid,
+  .about-page .legacy-timeline,
+  .about-page .team-grid,
+  .about-page .craft-item,
+  .about-page .stats-grid,
+  .about-page .about-cta { width: calc(100% - 40px); }
 
-    .pillar-grid,
-    .legacy-timeline,
-    .team-grid,
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
+  .about-hero {
+    padding: 42px 0 48px;
+  }
 
-    .pillar-card:nth-child(2) {
-        border-right: none;
-    }
+  .about-hero-layout { grid-template-columns: minmax(0, 1fr); gap: 34px; }
+  .about-hero-content { order: 1; }
+  .about-hero-media { order: 2; width: min(100%, 460px); margin-left: auto; }
+  .about-hero-media img { aspect-ratio: 1.16; }
+  .about-hero h1 { margin: 17px 0 20px; font-size: clamp(40px, 10vw, 62px); }
+  .about-hero p { font-size: 13px; line-height: 1.8; }
+  .about-line { margin: 22px 0; }
 
-    .pillar-card:nth-child(-n + 2) {
-        border-bottom: 1px solid var(--zarr-border);
-    }
+  .brand-pillars { padding: 26px 0 68px; }
+  .pillar-grid,
+  .legacy-timeline,
+  .team-grid { grid-template-columns: 1fr; }
+  .pillar-card { min-height: 0; padding: 28px 24px; border-right: 0; border-bottom: 1px solid var(--about-rule); }
+  .pillar-card:nth-child(3) { border-right: 0; }
+  .pillar-card:last-child { border-bottom: 0; }
+  .pillar-icon { width: 44px; height: 44px; margin-bottom: 15px; }
+  .pillar-card p { margin-top: 9px; }
 
-    .pillar-card:nth-child(3) {
-        border-right: 1px solid var(--zarr-border);
-    }
+  .about-page .section-heading { width: calc(100% - 40px); padding: 68px 0 34px; }
+  .about-page .section-heading h2 { font-size: clamp(30px, 8vw, 40px); }
+  .about-page .section-heading p { font-size: 13px; }
+  .zarr-legacy { padding-bottom: 72px; }
+  .legacy-timeline { gap: 32px; }
+  .legacy-image { aspect-ratio: 1.38; }
+  .legacy-content { padding-top: 15px; }
+  .legacy-content h3 { font-size: 21px; }
 
-    .stat:nth-child(2) {
-        border-right: none;
-    }
+  .zarr-team { padding-bottom: 74px; }
+  .team-grid { max-width: 390px !important; gap: 34px; }
+  .team-image { aspect-ratio: 1.05; }
+  .team-role { margin-top: 14px; }
 
-    .stat:nth-child(-n + 2) {
-        padding: 70px;
-        border-bottom: 1px solid var(--zarr-border);
-    }
+  .craftsmanship { padding-bottom: 74px; }
+  .craft-item,
+  .craft-item:nth-of-type(even) { grid-template-columns: 1fr; gap: 22px; margin-bottom: 48px; }
+  .craft-item:nth-of-type(even) .craft-image,
+  .craft-item:nth-of-type(even) .craft-content { order: initial; }
+  .craft-image { aspect-ratio: 1.2; }
+  .craft-content { max-width: none; padding: 0 2px; }
+  .craft-content h3 { font-size: 27px; }
 
-    .about-cta {
-        align-items: flex-start;
-        flex-direction: column;
-    }
+  .about-page > .about-stats { padding-bottom: 70px; }
+  .about-page > .about-stats .section-heading { padding-bottom: 30px; }
+  .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stat { min-height: 145px; padding: 20px 10px; }
+  .stat strong { font-size: 36px; }
+  .stat > span { font-size: 8px; letter-spacing: 1px; }
+
+  .about-cta { align-items: stretch; flex-direction: column; gap: 22px; margin-top: 38px !important; padding: 28px 22px; }
+  .about-cta-button { width: 100%; }
 }
 
-/*    MOBILE  */
-@media (max-width: 650px) {
-    .about-hero {
-        min-height: 600px;
-        background-position: 60% center;
-    }
-
-    .about-hero-content {
-        padding-top: 110px;
-        padding-bottom: 75px;
-    }
-
-    .about-hero h1 {
-        font-size: 40px;
-        letter-spacing: -0.5px;
-    }
-
-    .about-hero p {
-        font-size: 14px;
-        line-height: 1.75;
-    }
-
-    .about-page .section-heading {
-        padding: 70px 0 40px;
-    }
-
-    .about-page .section-heading h2 {
-        font-size: 32px;
-    }
-
-    .pillar-grid,
-    .legacy-timeline,
-    .team-grid,
-    .stats-grid {
-        grid-template-columns: 1fr;
-    }
-
-    /* PILLARS */
-    .pillar-card {
-        min-height: 260px;
-        border-right: none !important;
-        border-bottom: 1px solid var(--zarr-border);
-    }
-
-    .pillar-card:last-child {
-        border-bottom: none;
-    }
-
-    /* LEGACY */
-    .legacy-timeline {
-        gap: 45px;
-    }
-
-    .legacy-image {
-        aspect-ratio: 1.35;
-        margin: 85px 0;
-    }
-
-    .legacy-content {
-        padding: 22px 8px 0;
-    }
-
-    /* TEAM */
-    .team-grid {
-        gap: 50px;
-    }
-
-    .team-image {
-        max-width: 350px;
-        margin: 0 auto;
-    }
-
-    .team-card {
-        padding-bottom: 4px;
-        margin: 120px 0;
-    }
-
-    /* CRAFTSMANSHIP */
-    .craft-item {
-        margin-bottom: 65px;
-    }
-
-    .craft-image {
-        aspect-ratio: 1.15;
-        margin: 120px 0;
-    }
-
-    .craft-content {
-        margin-top: 28px;
-        padding: 0 8px;
-    }
-
-    .craft-content h3 {
-        font-size: 22px;
-    }
-
-    /* STATS */
-    .stat {
-        min-height: 170px;
-        border-right: none;
-        border-bottom: 1px solid var(--zarr-border);
-    }
-
-    .stat:last-child {
-        border-bottom: none;
-    }
-
-    /* CTA */
-    .about-cta {
-        padding-top: 45px;
-        gap: 30px;
-    }
-
-    .about-cta-content h3 {
-        font-size: 27px;
-    }
-
-    .about-cta-button {
-        width: 100%;
-        text-align: center;
-    }
-}
-
-/*  
-   VERY SMALL SCREENS
-  */
-@media (max-width: 400px) {
-    .about-hero h1 {
-        font-size: 34px;
-    }
-
-    .about-page .section-heading h2 {
-        font-size: 28px;
-    }
-
-    .pillar-card {
-        padding: 35px 22px;
-    }
-
-    .craft-content h3 {
-        font-size: 20px;
-    }
-
-    .stat strong {
-        font-size: 36px;
-    }
+@media (prefers-reduced-motion: reduce) {
+  .pillar-card,
+  .legacy-image img,
+  .team-image img,
+  .craft-image img,
+  .about-cta-button { transition: none; }
 }

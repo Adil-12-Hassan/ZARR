@@ -46,6 +46,16 @@ const NAV_ITEMS = [
     ),
   },
   {
+    to: "/admin/articles",
+    label: "Articles",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M6 3.5h9l3 3V20H6V3.5Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+        <path d="M9 10h6M9 13.5h6M9 17h4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+      </svg>
+    ),
+  },
+  {
     to: "/admin/orders",
     label: "Orders",
     icon: (

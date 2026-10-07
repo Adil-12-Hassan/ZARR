@@ -20,7 +20,7 @@ function buildMonthlyRevenue(orders) {
     monthMap.set(key, { month: key, label, value: 0, orders: 0, archived: false });
   }
 
-  orders.forEach((order) => {
+  orders.filter((order) => order.status !== "Cancelled").forEach((order) => {
     const date = new Date(order.createdAt || order.date || Date.now());
     const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
     if (!monthMap.has(key)) return;
@@ -36,7 +36,7 @@ function buildMonthlyRevenue(orders) {
 function buildProductRevenue(orders) {
   const map = new Map();
 
-  orders.forEach((order) => {
+  orders.filter((order) => order.status !== "Cancelled").forEach((order) => {
     (order.items || []).forEach((item) => {
       const name = item.name || "Product";
       const value = Number(item.price || 0) * Number(item.quantity || 1);
@@ -53,13 +53,14 @@ export default function AdminDashboard() {
   const productRevenue = useMemo(() => buildProductRevenue(orders), [orders]);
 
   const totalRevenue = useMemo(
-    () => orders.reduce((sum, order) => sum + Number(order.total || 0), 0),
+    () => orders.filter((order) => order.status !== "Cancelled").reduce((sum, order) => sum + Number(order.total || 0), 0),
     [orders],
   );
 
   const pendingOrders = orders.filter((o) => ["Pending", "Confirmed", "Processing", "Shipped"].includes(o.status)).length;
-  const avgOrderValue = orders.length
-    ? Math.round(orders.reduce((s, o) => s + Number(o.total || 0), 0) / orders.length)
+  const activeOrders = orders.filter((order) => order.status !== "Cancelled");
+  const avgOrderValue = activeOrders.length
+    ? Math.round(activeOrders.reduce((s, o) => s + Number(o.total || 0), 0) / activeOrders.length)
     : 0;
 
   const currentMonth = monthlyRevenue[monthlyRevenue.length - 1];
@@ -98,7 +99,7 @@ export default function AdminDashboard() {
           trendDirection="down"
         />
         <StatCard
-          label="Pending orders"
+          label="Open orders"
           value={pendingOrders}
           trend="Needs attention"
           trendDirection="down"

@@ -7,6 +7,7 @@ import "../styles/pages/adminLayout.css";
 const TITLES = {
   "/admin": ["Dashboard", "Revenue and store activity at a glance"],
   "/admin/products": ["Products", "Add, edit and organize what's for sale"],
+  "/admin/articles": ["Articles", "Write and publish stories for the ZARR Journal"],
   "/admin/orders": ["Orders", "Track and update every order's status"],
   "/admin/messages": ["Messages", "Enquiries submitted from the site's contact form"],
   "/admin/users": ["Customers", "Everyone who has created an account"],

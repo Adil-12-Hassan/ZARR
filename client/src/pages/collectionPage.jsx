@@ -5,6 +5,8 @@ import "../styles/pages/collectionPage.css";
 import useCartStore from "../store/cartStore";
 import { productAPI, subscribeToProductUpdates } from "../api/api";
 import { useAuth } from "../context/AuthContext";
+import { useSearchParams } from "react-router-dom";
+import { userAPI } from "../api/api";
 import heroImage from "../assets/hero-image-optimized.jpg";
 
 function FilterIcon() {
@@ -52,7 +54,9 @@ function CollectionPage() {
     const [gender, setGender] = useState("All");
     const [sort, setSort] = useState("featured");
     const addToCart = useCartStore((state) => state.addToCart);
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, user, refreshUser } = useAuth();
+    const [searchParams] = useSearchParams();
+    const wishlist = (user?.user?.wishlist || []).map((item) => String(item?._id || item));
     const [filters, setFilters] = useState({
         category: "",
         movement: "",
@@ -161,8 +165,16 @@ function CollectionPage() {
             result.sort((a, b) => String(a.name || "").localeCompare(String(b.name || "")));
         }
 
+        const query = (searchParams.get("search") || "").trim().toLowerCase();
+        if (query) result = result.filter((product) => `${product.name} ${product.category} ${product.description || ""}`.toLowerCase().includes(query));
         return result;
-    }, [products, gender, filters, sort]);
+    }, [products, gender, filters, sort, searchParams]);
+
+    const toggleWishlist = async (product) => {
+        if (!isAuthenticated) { window.alert("Please log in to save products."); return; }
+        try { await userAPI.toggleWishlist(product._id); await refreshUser(); }
+        catch (err) { window.alert(err.message || "Unable to update wishlist."); }
+    };
 
     return (
         <>
@@ -290,7 +302,7 @@ function CollectionPage() {
                                             <p className="product-price">PKR{" "}{Number(product.price || 0).toLocaleString()}</p>
                                         </div>
                                         <div className="product-actions">
-                                            <button className="details-button">VIEW DETAILS</button>
+                                            <button className="wishlist-button" type="button" onClick={() => toggleWishlist(product)}>{wishlist.includes(String(product._id)) ? "♥ SAVED" : "♡ SAVE"}</button>
                                             <button className="cart-button" aria-label={`Add ${product.name} to cart`} onClick={() => handleAddToCart(product)}><BagIcon /></button>
                                         </div>
                                     </article>

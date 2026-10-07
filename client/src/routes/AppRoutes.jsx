@@ -1,5 +1,5 @@
 import { Suspense, useEffect } from "react";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 
 import About from "../components/About";
 import CollectionSection from "../components/Collection";
@@ -17,6 +17,7 @@ import ManageMessages from "../pages/admin/MangeMessages";
 import ManageOrders from "../pages/admin/ManageOrders";
 import ManageProducts from "../pages/admin/ManageProducts";
 import ManageUsers from "../pages/admin/ManageUsers";
+import ManageArticles from "../pages/admin/ManageArticles";
 import Checkout from "../pages/checkoutPage";
 import Collection from "../pages/collectionPage";
 import ContactPage from "../pages/contactPage";
@@ -24,12 +25,14 @@ import AdminLogin from "../pages/auth/AdminLogin";
 import Login from "../pages/auth/login";
 import Register from "../pages/auth/register";
 import Journals from "../pages/journalsPage";
+import ArticlePage from "../pages/articlePage";
 import AccountPage from "../pages/user/AccountPage";
 import DashboardHome from "../pages/user/DashboardHome";
 import Orders from "../pages/user/Orders";
-import Profile from "../pages/user/Profile";
+import Settings from "../pages/user/Settings";
 import UserDashboard from "../pages/user/UserDashboard";
 import Wishlist from "../pages/user/Wishlist";
+import LegalPage from "../pages/LegalPage";
 
 const pageMetadata = {
     "/": [
@@ -45,8 +48,8 @@ const pageMetadata = {
         "Learn about ZARR and our approach to timeless design, precision, and craftsmanship.",
     ],
     "/journals": [
-        "The Journal | ZARR Watches",
-        "Stories, watch guides, and inspiration from ZARR.",
+        "The ZARR Journal | Stories, Guides & Craftsmanship",
+        "Explore original ZARR articles on watchmaking, craftsmanship, watch care, and timeless personal style.",
     ],
     "/contact": [
         "Contact ZARR | Customer Care",
@@ -61,10 +64,12 @@ function RouteMetadata() {
         const isPrivate = pathname.startsWith("/admin")
             || pathname.startsWith("/dashboard")
             || ["/checkout", "/login", "/register"].includes(pathname);
-        const [title, description] = pageMetadata[pathname] || [
-            "ZARR | Timeless Watches, Crafted to Last",
-            "Explore precision-crafted ZARR timepieces, designed for every moment.",
-        ];
+        const [title, description] = pageMetadata[pathname] || (pathname.startsWith("/journals/")
+            ? ["Article | The ZARR Journal", "Stories on watchmaking, craftsmanship, and timeless style from ZARR."]
+            : [
+                "ZARR | Timeless Watches, Crafted to Last",
+                "Explore precision-crafted ZARR timepieces, designed for every moment.",
+            ]);
 
         document.title = title;
         document.querySelector('meta[name="description"]')?.setAttribute("content", description);
@@ -103,8 +108,13 @@ function AppRoutes() {
                     <Route path="/" element={<Home />} />
                     <Route path="/collection" element={<Collection />} />
                     <Route path="/journals" element={<Journals />} />
+                    <Route path="/journals/:slug" element={<ArticlePage />} />
                     <Route path="/contact" element={<ContactPage />} />
+                    <Route path="/craftsmanship" element={<AboutPage />} />
                     <Route path="/about" element={<AboutPage />} />
+                    <Route path="/privacy" element={<LegalPage type="privacy" />} />
+                    <Route path="/terms" element={<LegalPage type="terms" />} />
+                    <Route path="/cookies" element={<LegalPage type="cookies" />} />
                     <Route path="/checkout" element={<Checkout />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
@@ -114,9 +124,9 @@ function AppRoutes() {
                             <Route index element={<DashboardHome />} />
                             <Route path="orders" element={<Orders />} />
                             <Route path="wishlist" element={<Wishlist />} />
-                            <Route path="addresses" element={<AccountPage type="Addresses" />} />
-                            <Route path="profile" element={<Profile />} />
-                            <Route path="settings" element={<AccountPage type="Settings" />} />
+                            <Route path="addresses" element={<AccountPage />} />
+                            <Route path="profile" element={<Navigate to="/dashboard/settings" replace />} />
+                            <Route path="settings" element={<Settings />} />
                         </Route>
                     </Route>
 
@@ -125,6 +135,7 @@ function AppRoutes() {
                         <Route path="/admin" element={<AdminLayout />}>
                             <Route index element={<AdminDashboard />} />
                             <Route path="products" element={<ManageProducts />} />
+                            <Route path="articles" element={<ManageArticles />} />
                             <Route path="orders" element={<ManageOrders />} />
                             <Route path="messages" element={<ManageMessages />} />
                             <Route path="users" element={<ManageUsers />} />

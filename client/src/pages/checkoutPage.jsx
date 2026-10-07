@@ -6,20 +6,12 @@ import "../styles/pages/checkoutPage.css";
 import useCartStore from "../store/cartStore";
 import { useAuth } from "../context/AuthContext";
 import { useOrders } from "../context/OrdersContext";
-import { orderAPI } from "../api/api";
-
-const paymentMethods = [
-  { name: "Visa", logo: "https://cdn.simpleicons.org/visa" },
-  { name: "Mastercard", logo: "https://cdn.simpleicons.org/mastercard" },
-  { name: "PayPal", logo: "https://cdn.simpleicons.org/paypal" },
-  { name: "Google Pay", logo: "https://cdn.simpleicons.org/googlepay" },
-  { name: "Apple Pay", logo: "https://cdn.simpleicons.org/applepay" },
-  { name: "JazzCash", logo: "https://cdn.simpleicons.org/jazzcash" },
-];
+import { orderAPI, userAPI } from "../api/api";
 
 function Checkout() {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, refreshUser } = useAuth();
+  const savedAddresses = user?.user?.addresses || [];
   const { addOrder } = useOrders();
   const cartItems = useCartStore((state) => state.items);
   const clearCart = useCartStore((state) => state.clearCart);
@@ -28,6 +20,20 @@ function Checkout() {
   const [placing, setPlacing] = useState(false);
   const [orderError, setOrderError] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("Cash on Delivery");
+  const paymentMethods = [
+    {
+      name: "Cash on Delivery",
+      logo: "https://cdn.simpleicons.org/bank/black",
+    },
+    {
+      name: "Card Payment",
+      logo: "https://cdn.simpleicons.org/visa/black",
+    },
+    {
+      name: "Digital Wallet",
+      logo: "https://cdn.simpleicons.org/paypal/black",
+    },
+  ];
 
   const [formData, setFormData] = useState({
     email: user?.user?.email || "",
@@ -83,6 +89,12 @@ function Checkout() {
     setPlacing(true);
     setOrderError("");
     try {
+      if (formData.saveInformation && user?.user && formData.address && formData.city && formData.phone) {
+        try {
+          await userAPI.addAddress({ label: "Checkout", ...formData, isDefault: savedAddresses.length === 0 });
+          await refreshUser();
+        } catch { /* Address saving is optional; it must not prevent checkout. */ }
+      }
       const orderData = {
         items: cartItems.map((item) => ({
           product: item._id || item.id,
@@ -175,7 +187,7 @@ function Checkout() {
             {/* LEFT SIDE */}
             <section className="checkout-main">
               {/* Contact Information */}
-              <div className="checkout-card">
+              {currentStep <= 1 && <div className="checkout-card checkout-reveal is-visible">
                 <div className="section-heading">
                   <span className="section-number">01</span>
                   <div>
@@ -205,8 +217,10 @@ function Checkout() {
                     Email me with news, exclusive offers and new arrivals
                   </span>
                 </label>
-              </div>           {/* Shipping Address */}
-              <div className="checkout-card">
+                <button type="button" className="primary-button" onClick={handleContinue}>Continue to Shipping <span>→</span></button>
+              </div>}
+              {/* Shipping Address */}
+              {currentStep === 2 && <div className="checkout-card checkout-reveal is-visible">
                 <div className="section-heading">
                   <span className="section-number">02</span>
                   <div>
@@ -214,6 +228,7 @@ function Checkout() {
                     <p>Where would you like your order delivered?</p>
                   </div>
                 </div>
+                {savedAddresses.length > 0 && <div className="form-group"><label htmlFor="savedAddress">Use a saved address</label><select id="savedAddress" defaultValue="" onChange={(event) => { const address = savedAddresses.find((item) => item._id === event.target.value); if (address) setFormData((prev) => ({ ...prev, ...address })); }}><option value="">Enter a new address</option>{savedAddresses.map((address) => <option key={address._id} value={address._id}>{address.label}: {address.address}, {address.city}</option>)}</select></div>}
                 <div className="form-grid two-columns">
                   <div className="form-group">
                     <label htmlFor="fullName">Full Name</label>
@@ -340,14 +355,13 @@ function Checkout() {
                   className="primary-button"
                   onClick={handleContinue}
                 >
-                  {currentStep < 2
-                    ? "Continue to Shipping"
-                    : "Continue to Payment"}
+                  Continue to Payment
                   <span>→</span>
                 </button>
-              </div>           {/* Payment */}
+              </div>}
+              {/* Payment */}
               {currentStep >= 3 && (
-                <div className="checkout-card">
+                <div className="checkout-card checkout-reveal is-visible">
                   <div className="section-heading">
                     <span className="section-number">03</span>
                     <div>
@@ -436,7 +450,7 @@ function Checkout() {
                 </div>
               )}           {/* Review */}
               {currentStep >= 4 && (
-                <div className="checkout-card review-card">
+                <div className="checkout-card review-card checkout-reveal is-visible">
                   <div className="section-heading">
                     <span className="section-number">04</span>
                     <div>
