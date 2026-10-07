@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
+import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
 
 const addressSchema = new mongoose.Schema(
   {
@@ -34,7 +34,7 @@ const userSchema = new mongoose.Schema(
 
     // Bumped on password change or explicit "log out everywhere" /
     // admin force-logout. Embedded in every JWT we issue; if it doesn't
-    // match the current value on the user doc, the token is rejected —
+    // match the current value on the user doc, the token is rejected  -
     // this is what lets us kill a session server-side, not just rely on
     // the client to delete its own token.
     tokenVersion: { type: Number, default: 0 },
@@ -63,4 +63,4 @@ userSchema.methods.toSafeJSON = function toSafeJSON() {
   return obj;
 };
 
-module.exports = mongoose.model("User", userSchema);
+export default mongoose.model("User", userSchema);

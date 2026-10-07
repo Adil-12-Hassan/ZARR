@@ -1,61 +1,37 @@
-# ZARR
+# ZARR - Precision, Worn Daily
 
-ZARR is a full-stack ecommerce application for a curated home and lifestyle storefront. It combines a responsive React shopping experience with a REST API and MongoDB-backed services for accounts, products, orders, and customer messages.
+**A premium watch storefront built for a considered shopping experience.** ZARR pairs a React storefront and customer dashboard with an Express API, MongoDB, and a separate admin workspace.
 
-The repository contains two independently run applications:
+![React](https://img.shields.io/badge/React-19-149ECA?logo=react&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-Express-339933?logo=nodedotjs&logoColor=white)
+![MongoDB](https://img.shields.io/badge/Database-MongoDB-47A248?logo=mongodb&logoColor=white)
+![Vercel](https://img.shields.io/badge/Frontend-Vercel-black?logo=vercel&logoColor=white)
 
-- `client/` — React storefront, customer account area, and admin dashboard.
-- `server/` — Express API, MongoDB models, JWT authentication, and Socket.IO server.
+## ✨ The experience
 
-## Highlights
+- Browse the watch collection, filter and sort products, and manage a cart.
+- Create an account, check out with Cash on Delivery, and manage orders, addresses, and a wishlist.
+- Use the protected admin workspace to manage products, orders, users, and customer messages.
+- Authenticate with JWTs, hashed passwords, role checks, rate limits, input sanitization, and security headers.
 
-- Product collection browsing and product detail views.
-- Cart and checkout flow with order creation.
-- Customer registration and login, order history, profile settings, addresses, and wishlist.
-- Separate admin login and protected dashboard for managing products, orders, users, and contact messages.
-- Role-aware API authorization, password hashing, rate limits on sensitive endpoints, input sanitization, and security headers.
-- Persistent customer sessions and tab-scoped admin sessions, with server-side token invalidation on logout.
-- Contact form submissions available for administrators to review.
+## 🧭 Project map
 
-## Technology
-
-| Area | Technologies |
+| Folder | What lives there |
 | --- | --- |
-| Frontend | React 19, React Router, Zustand, Socket.IO Client |
-| Backend | Node.js, Express, Socket.IO |
-| Database | MongoDB with Mongoose |
-| Authentication | JWT, bcryptjs |
-| Security | Helmet, express-rate-limit, express-mongo-sanitize |
+| [`client/`](client/README.md) | React storefront, account pages, admin interface, and Vercel SPA config |
+| [`server/`](server/README.md) | Express API, MongoDB models, authentication, and Socket.IO setup |
 
-## Requirements
+## 🚀 Run locally
 
-- Node.js and npm.
-- MongoDB running locally or an accessible MongoDB Atlas database.
-- A modern browser.
+**You’ll need:** Node.js with npm, MongoDB, and a modern browser.
 
-## Run Locally
+### 1. Configure and start the API
 
-Open two terminals from the repository root.
-
-### 1. Configure the API
-
-Create `server/.env` from the example file.
-
-PowerShell:
+From the repository root, copy the example configuration:
 
 ```powershell
 Copy-Item server/.env.example server/.env
 ```
-
-macOS/Linux:
-
-```bash
-cp server/.env.example server/.env
-```
-
-Edit `server/.env` and set the MongoDB connection string, frontend origin, unique JWT secrets, and admin bootstrap credentials. See [Environment Configuration](#environment-configuration) before using this outside local development.
-
-Install dependencies and start the API:
 
 ```bash
 cd server
@@ -63,21 +39,21 @@ npm install
 npm run dev
 ```
 
-The API defaults to `http://localhost:5000`. Check that it is running at `http://localhost:5000/api/health`.
+Set `MONGO_URI`, `CLIENT_URL`, and two distinct JWT secrets in `server/.env`. Use a persistent MongoDB database: restarting the API should not delete database records. The API starts at `http://localhost:5000`; its health endpoint is `http://localhost:5000/api/health`.
 
 ### 2. Create the first administrator
 
-With the API environment configured, run the bootstrap script once from the `server/` directory:
+Set `ADMIN_BOOTSTRAP_EMAIL` and `ADMIN_BOOTSTRAP_PASSWORD` in `server/.env`, then run this once from `server/`:
 
 ```bash
 node src/scripts/createAdmin.js
 ```
 
-The script uses `ADMIN_BOOTSTRAP_EMAIL` and `ADMIN_BOOTSTRAP_PASSWORD`. It creates an admin account when that email is new, or promotes the existing account with that email to the admin role. Choose a unique, private password before running it. Do not publish the credentials or commit `.env`.
+Keep the bootstrap credentials private. Public registration creates customer accounts only.
 
 ### 3. Start the storefront
 
-In a second terminal:
+In another terminal:
 
 ```bash
 cd client
@@ -85,120 +61,75 @@ npm install
 npm start
 ```
 
-The development server is available at `http://localhost:3000`. The client defaults to the API URL `http://localhost:5000/api`; to use another API origin, define `REACT_APP_BACKEND_URL` in the client's environment, including the `/api` path.
+The storefront runs at `http://localhost:3000` and defaults to `http://localhost:5000/api`. Set `REACT_APP_BACKEND_URL` in the client environment to use a different API URL; include the `/api` path.
 
-## Environment Configuration
+## ☁️ Deploy
 
-The backend loads configuration from `server/.env`.
+- **Frontend:** deploy `client/` as its own Vercel project. The included [`client/vercel.json`](client/vercel.json) supports client-side routes and sets asset caching and security headers.
+- **API:** deploy `server/` as a separate Vercel project with `server/` as the project root, or run it on a persistent Node.js host. Configure `MONGO_URI`, `CLIENT_URL`, `JWT_SECRET`, and `JWT_ADMIN_SECRET` in the host’s environment. `CLIENT_URL` can contain comma-separated HTTPS origins.
+- **Realtime:** Socket.IO is enabled for local development and a persistent Node.js API host. The current Vercel serverless export serves REST routes only; leave `REACT_APP_ENABLE_REALTIME` unset for that deployment.
 
-| Variable | Purpose | Local default/example |
+## 🔐 Environment variables
+
+The API reads these values from `server/.env` locally and from the deployment environment in production.
+
+| Variable | Purpose | Local example |
 | --- | --- | --- |
-| `PORT` | API port | `5000` |
+| `PORT` | API listen port | `5000` |
 | `NODE_ENV` | Runtime mode | `development` |
 | `MONGO_URI` | MongoDB connection string | `mongodb://127.0.0.1:27017/zarr` |
-| `CLIENT_URL` | Allowed frontend origin for CORS | `http://localhost:3000` |
-| `JWT_SECRET` | Signing key for customer tokens | Replace with a strong random secret |
-| `JWT_ADMIN_SECRET` | Separate signing key for admin tokens | Replace with a different strong random secret |
+| `CLIENT_URL` | Allowed frontend origin(s) | `http://localhost:3000` |
+| `JWT_SECRET` | Customer token signing secret | Generate a unique random value |
+| `JWT_ADMIN_SECRET` | Admin token signing secret | Generate a different random value |
 | `JWT_USER_EXPIRES_IN` | Customer token lifetime | `7d` |
 | `JWT_ADMIN_EXPIRES_IN` | Admin token lifetime | `2h` |
-| `ADMIN_BOOTSTRAP_EMAIL` | Email used by the admin setup script | Set to your chosen admin email |
-| `ADMIN_BOOTSTRAP_PASSWORD` | Password used by the admin setup script | Set a unique password (8+ characters in development, 12+ in production) |
+| `ADMIN_BOOTSTRAP_EMAIL` | First admin account email | Your admin email |
+| `ADMIN_BOOTSTRAP_PASSWORD` | First admin account password | A private, strong password |
 
-Generate a random secret with Node.js:
-
-```bash
-node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"
-```
-
-Generate two different values for the JWT secrets. In production, use HTTPS, strong unique secrets, a production MongoDB database, and a `CLIENT_URL` matching the deployed frontend origin. Never use the example secrets or bootstrap password in a deployed environment.
-
-## Application Areas
-
-### Storefront
-
-The public experience includes the home page, collection, journals, about and contact pages, customer login and registration, and checkout. Product browsing is available without signing in; placing an order requires authentication.
-
-### Customer account
-
-Signed-in customers can view their dashboard and orders, maintain profile details and delivery addresses, and manage a wishlist. Customer sessions are stored in browser local storage and restored on page reload while the API token remains valid.
-
-### Admin dashboard
-
-Administrators sign in separately at `/admin/login`. Protected dashboard pages cover overview metrics, product management, order management, user management, messages, and settings. Admin tokens use a separate signing secret and expiry, are stored in session storage, and are cleared when the tab session ends. The client also applies a 30-minute inactivity timeout.
-
-## API Overview
-
-All HTTP endpoints are mounted below `/api`. Protected endpoints require a bearer token in the `Authorization` header. Admin-only endpoints additionally require an administrator account.
-
-| Area | Routes | Access |
-| --- | --- | --- |
-| Health | `GET /health` | Public |
-| Authentication | `POST /auth/register`, `POST /auth/login`, `POST /auth/admin/login`, `GET /auth/me`, `POST /auth/logout` | Public login/register; authenticated session routes |
-| Products | `GET /products`, `GET /products/:id`, `POST /products`, `PUT /products/:id`, `DELETE /products/:id` | Reads public; writes admin |
-| Orders | `POST /orders`, `GET /orders/my`, `GET /orders/:id`, `PATCH /orders/:id/cancel`, `GET /orders`, `PATCH /orders/:id/status` | Customer or admin depending on route |
-| Customer accounts | `GET /users/me`, `PUT /users/me`, `PUT /users/me/password`, wishlist and address routes | Authenticated customer |
-| User administration | `GET /users`, `DELETE /users/:id` | Admin |
-| Messages | `POST /messages`, `GET /messages`, `PATCH /messages/:id/read`, `DELETE /messages/:id` | Submission public; management admin |
-
-## Project Structure
-
-```text
-client/
-	public/                 Static public files
-	src/
-		api/                   HTTP and Socket.IO client helpers
-		components/            Storefront and dashboard UI components
-		context/               Authentication, cart, and order contexts
-		pages/                 Store, customer, and admin pages
-		routes/                Application routes and access guards
-		store/                 Client-side state stores
-		styles/                Page and component stylesheets
-server/
-	src/
-		config/                Database connection setup
-		controllers/           Request handlers
-		middleware/            Authentication, rate limits, and errors
-		models/                Mongoose data models
-		routes/                REST endpoint definitions
-		scripts/               Admin bootstrap utility
-		sockets/               Socket.IO server setup
-		utils/                 Shared server utilities
-```
-
-## Build and Test
-
-Create a production client build:
+Generate each JWT secret with:
 
 ```bash
-cd client
-npm run build
+node --input-type=module -e "import { randomBytes } from 'node:crypto'; console.log(randomBytes(48).toString('hex'))"
 ```
 
-Run the client test runner:
+Never commit `.env` files or use example credentials in production.
+
+## 🛠️ Useful commands
 
 ```bash
-cd client
-npm test
+# Storefront production build
+cd client && npm run build
+
+# Storefront test runner
+cd client && npm test
+
+# API without file watching
+cd server && npm start
 ```
 
-Start the API without file watching:
+## 📡 API at a glance
 
-```bash
-cd server
-npm start
-```
+All endpoints are under `/api`. Protected routes require a bearer token in the `Authorization` header.
 
-## Current Scope and Notes
+| Area | Routes |
+| --- | --- |
+| Health | `GET /api/health` |
+| Authentication | `/api/auth/register`, `/api/auth/login`, `/api/auth/admin/login`, `/api/auth/me`, `/api/auth/logout` |
+| Products | `GET /api/products`, `GET /api/products/:id`; admin create, update, and delete routes |
+| Orders | Create, list, view, cancel, and update order status under `/api/orders` |
+| Accounts | Profile, password, wishlist, and address routes under `/api/users` |
+| Messages | Public `POST /api/messages`; admin list, read, and delete routes |
 
-- Orders currently support Cash on Delivery; an online payment provider is not integrated.
-- Product images are represented by image URLs; an upload and media-storage service is not included.
-- The backend initializes Socket.IO and supports authenticated socket connections. Live events are not yet integrated throughout the admin dashboard UI.
-- The client uses Create React App (`react-scripts`) for development and production builds.
+## 📌 Current scope
 
-## Security
+- Checkout currently supports Cash on Delivery; no payment gateway is connected.
+- Product photos use image URLs; image upload and media hosting are not included.
+- The API has Socket.IO events, but the admin interface does not yet consume all of them.
+- The client uses Create React App and React Router. Public page metadata updates in the browser after the app loads.
 
-- Keep `server/.env` and all production credentials private; commit only `.env.example` files with safe placeholders.
-- Use different, high-entropy values for `JWT_SECRET` and `JWT_ADMIN_SECRET`.
-- Never expose admin bootstrap credentials in source control, screenshots, or public documentation.
-- If bootstrap credentials are no longer needed after creating the administrator, remove them from the deployed environment.
-- Deploy the frontend and API over HTTPS and restrict database network access to trusted services.
+## 🛡️ Security notes
+
+- Keep production secrets and database credentials private.
+- Use separate, high-entropy customer and admin JWT secrets.
+- Restrict database network access to trusted services and serve both apps over HTTPS.
+- Remove admin bootstrap credentials from the deployment environment after creating the initial admin if they are no longer needed.

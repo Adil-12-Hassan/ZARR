@@ -1,13 +1,13 @@
 /**
  * One-time setup. Run with:  node src/scripts/createAdmin.js
  * Reads ADMIN_BOOTSTRAP_EMAIL / ADMIN_BOOTSTRAP_PASSWORD from .env.
- * Public /api/auth/register can never create an admin — this script is
+ * Public /api/auth/register can never create an admin  - this script is
  * the only way an admin account gets made.
  */
-require("dotenv").config();
-const mongoose = require("mongoose");
-const connectDB = require("../config/db");
-const User = require("../models/User");
+import "dotenv/config";
+import mongoose from "mongoose";
+import connectDB from "../config/db.js";
+import User from "../models/User.js";
 
 async function run() {
   await connectDB();

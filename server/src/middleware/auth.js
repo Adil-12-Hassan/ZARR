@@ -1,5 +1,5 @@
-const jwt = require("jsonwebtoken");
-const User = require("../models/User");
+import jwt from "jsonwebtoken";
+import User from "../models/User.js";
 
 function getBearerToken(req) {
   const header = req.headers.authorization || "";
@@ -49,7 +49,7 @@ function protect({ isAdmin = false } = {}) {
   };
 }
 
-// For routes any logged-in user (or admin) may hit — tries user secret
+// For routes any logged-in user (or admin) may hit  - tries user secret
 // first, falls back to admin secret, so /orders/my works no matter which
 // token type is presented.
 function protectAny() {
@@ -90,7 +90,7 @@ function optionalAuth() {
           break;
         }
       } catch {
-        // ignore — treat as guest
+        // ignore  - treat as guest
       }
     }
     next();
@@ -104,4 +104,4 @@ function adminOnly(req, res, next) {
   next();
 }
 
-module.exports = { protect, protectAny, optionalAuth, adminOnly };
+export { protect, protectAny, optionalAuth, adminOnly };

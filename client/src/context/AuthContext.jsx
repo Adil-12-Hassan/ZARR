@@ -3,13 +3,13 @@ import { authAPI, userAPI } from "../api/api";
 
 const AuthContext = createContext(null);
 
-// Regular users: localStorage — persists across browser restarts, like a
+// Regular users: localStorage  - persists across browser restarts, like a
 // normal "stay logged in" e-commerce session (backend token also expires
 // after JWT_USER_EXPIRES_IN, default 7d).
 const USER_KEY = "zarr_auth_user";
 
 // Admin: sessionStorage instead of localStorage. sessionStorage is wiped
-// automatically when the tab/browser closes — that's what gives you the
+// automatically when the tab/browser closes  - that's what gives you the
 // "GCUF portal" behaviour (close the site, session's gone) without any
 // extra code, because the browser does it for us. Backend also caps the
 // admin token itself at JWT_ADMIN_EXPIRES_IN (default 2h) so it can't be
@@ -18,7 +18,7 @@ const ADMIN_KEY = "zarr_auth_admin";
 
 // On top of both of those: if the admin is logged in but doesn't touch the
 // page for this long, we log them out client-side even though the tab is
-// still open — this is the "forgot to log out" case.
+// still open  - this is the "forgot to log out" case.
 const ADMIN_IDLE_TIMEOUT_MS = 30 * 60 * 1000; // 30 minutes
 
 function readStorage(key, storage) {
@@ -120,7 +120,7 @@ export function AuthProvider({ children }) {
     const resetTimer = () => {
       if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
       idleTimerRef.current = setTimeout(() => {
-        // Idle too long — log out even though the tab is still open.
+        // Idle too long  - log out even though the tab is still open.
         setUser(null);
         setIsAdminSession(false);
         setError("You were logged out after 30 minutes of inactivity.");
@@ -194,7 +194,7 @@ export function AuthProvider({ children }) {
 
   // --- Logout ------------------------------------------------------------
   const logout = () => {
-    // Tell the server too — this bumps tokenVersion so the token can't be
+    // Tell the server too  - this bumps tokenVersion so the token can't be
     // reused even if it somehow leaked, not just deleted client-side.
     authAPI.logout().catch(() => {});
     setUser(null);

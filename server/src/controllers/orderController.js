@@ -1,6 +1,6 @@
-const Order = require("../models/Order");
-const Product = require("../models/Product");
-const mongoose = require("mongoose");
+import Order from "../models/Order.js";
+import Product from "../models/Product.js";
+import mongoose from "mongoose";
 
 const SHIPPING_FEE = 500;
 const TAX_RATE = 0.135;
@@ -30,7 +30,7 @@ async function restoreOrderStock(order) {
   }
 }
 
-// paymentMethod is intentionally never trusted from the client — COD is
+// paymentMethod is intentionally never trusted from the client  - COD is
 // the only thing that works right now, so we force it here regardless of
 // what the checkout form sends. Remove this override once a real gateway
 // is wired up.
@@ -183,7 +183,7 @@ async function getOrder(req, res, next) {
 }
 
 // User can only cancel their own order, and only while it's still early
-// in the pipeline — once it's Shipped/Delivered, cancellation has to go
+// in the pipeline  - once it's Shipped/Delivered, cancellation has to go
 // through the admin (they've already handed it off).
 async function cancelOrder(req, res, next) {
   try {
@@ -261,7 +261,7 @@ async function updateOrderStatus(req, res, next) {
   }
 }
 
-module.exports = {
+export {
   createOrder,
   getMyOrders,
   getOrder,

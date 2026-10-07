@@ -1,7 +1,6 @@
 import React from "react";
-import ZARR from "../../src/assets/ZARR.png";
+import ZARR from "../assets/ZARR-optimized.png";
 import "../styles/components/footer.css"
-import "../global.css"
 
 function Footer() {
     return (

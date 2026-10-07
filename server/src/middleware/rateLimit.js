@@ -1,4 +1,4 @@
-const rateLimit = require("express-rate-limit");
+import rateLimit from "express-rate-limit";
 
 // Brute-force protection on login endpoints. Keyed by IP; 10 attempts per
 // 15 minutes is enough for a real user who mistypes a password a few times,
@@ -35,4 +35,4 @@ const passwordChangeLimiter = rateLimit({
   message: { message: "Too many password changes. Try again later." },
 });
 
-module.exports = { loginLimiter, registerLimiter, contactLimiter, passwordChangeLimiter };
+export { loginLimiter, registerLimiter, contactLimiter, passwordChangeLimiter };

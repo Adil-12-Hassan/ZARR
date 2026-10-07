@@ -1,7 +1,7 @@
 import { useId, useState } from "react";
 
 /**
- * Minimal SVG line/area chart — no charting library required.
+ * Minimal SVG line/area chart  - no charting library required.
  * data: [{ label: "Jan", value: 12000 }, ...]
  */
 export default function LineChart({ data, height = 220, formatValue = (v) => v }) {

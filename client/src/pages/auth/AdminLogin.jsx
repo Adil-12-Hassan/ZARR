@@ -5,7 +5,6 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import "../../styles/pages/adminLogin.css";
 import securityImage from "../../assets/admin-login.png";
-import "../../global.css";
 
 function AdminLogin() {
   const navigate = useNavigate();
@@ -122,8 +121,8 @@ function AdminLogin() {
                     <i
                       className={
                         showPassword
-                          ? "fa-regular fa-eye-slash"
-                          : "fa-regular fa-eye"
+                          ? "fa fa-eye-slash"
+                          : "fa fa-eye"
                       }
                     ></i>
                   </button>

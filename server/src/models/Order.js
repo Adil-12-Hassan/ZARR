@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const orderItemSchema = new mongoose.Schema(
   {
@@ -40,7 +40,7 @@ const orderSchema = new mongoose.Schema(
     total: { type: Number, required: true, min: 0 },
     couponCode: String,
 
-    // Only COD is functional today — see paymentAPI notes.
+    // Only COD is functional today  - see paymentAPI notes.
     paymentMethod: { type: String, enum: ["Cash on Delivery"], default: "Cash on Delivery" },
     paymentStatus: { type: String, enum: ["Pending", "Paid"], default: "Pending" },
 
@@ -54,4 +54,4 @@ const orderSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Order", orderSchema);
+export default mongoose.model("Order", orderSchema);

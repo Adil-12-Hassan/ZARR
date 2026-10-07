@@ -1,9 +1,8 @@
 import React from "react";
-import Diamond from "../assets/diamond.png"
-import Setting from "../assets/setting.png"
-import Security from "../assets/security.png"
-import World from "../assets/world.png"
-import "../../src/global.css"
+import Diamond from "../assets/diamond-optimized.png"
+import Setting from "../assets/setting-optimized.png"
+import Security from "../assets/security-optimized.png"
+import World from "../assets/world-optimized.png"
 import "../../src/styles/components/feature.css"
 
 function Features() {

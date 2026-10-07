@@ -3,7 +3,7 @@ import { io } from "socket.io-client";
 // All API calls go through this file.
 // Base URL points to your Express server.
 
-const BASE_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000/api";
+const BASE_URL = (process.env.REACT_APP_BACKEND_URL || "http://localhost:5000/api").replace(/\/+$/, "");
 
 // - Helper: get the stored token
 // Checks the admin's sessionStorage slot first (mirrors AuthContext's
@@ -23,6 +23,12 @@ function getToken() {
 }
 
 export function subscribeToProductUpdates(onUpdate) {
+    // In production, only open sockets when the API has a persistent host or
+    // a shared Socket.IO adapter configured across serverless instances.
+    const enabled = process.env.REACT_APP_ENABLE_REALTIME === "true"
+        || (process.env.NODE_ENV === "development" && process.env.REACT_APP_ENABLE_REALTIME !== "false");
+    if (!enabled) return () => {};
+
     const socketUrl = BASE_URL.replace(/\/api\/?$/, "");
     const socket = io(socketUrl, { auth: { token: getToken() } });
     socket.on("products:updated", onUpdate);
@@ -31,19 +37,30 @@ export function subscribeToProductUpdates(onUpdate) {
 
 // Core request function
 async function request(path, options = {}) {
-    const token = getToken(); const headers = {
+    const token = getToken();
+    const headers = {
         "Content-Type": "application/json",
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
         ...(options.headers || {}),
-    }; const res = await fetch(`${BASE_URL}${path}`, {
+    };
+    const res = await fetch(`${BASE_URL}${path}`, {
         ...options,
         headers,
-    }); const data = await res.json(); if (!res.ok) {
-        // Throw the server's error message so components can show it
-        const error = new Error(data.message || "Something went wrong");
+    });
+
+    let data = {};
+    try {
+        data = await res.json();
+    } catch {
+        // Keep non-JSON proxy errors from masking the useful HTTP status.
+    }
+
+    if (!res.ok) {
+        const error = new Error(data.message || `Request failed (${res.status}).`);
         error.status = res.status;
         throw error;
-    } return data;
+    }
+    return data;
 }
 
 // Auth

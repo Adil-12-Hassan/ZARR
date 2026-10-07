@@ -1,5 +1,5 @@
-const express = require("express");
-const {
+import express from "express";
+import {
   getMe,
   updateMe,
   changePassword,
@@ -8,9 +8,9 @@ const {
   deleteAddress,
   getAllUsers,
   removeUser,
-} = require("../controllers/userController");
-const { protect, adminOnly } = require("../middleware/auth");
-const { passwordChangeLimiter } = require("../middleware/rateLimit");
+} from "../controllers/userController.js";
+import { protect, adminOnly } from "../middleware/auth.js";
+import { passwordChangeLimiter } from "../middleware/rateLimit.js";
 
 const router = express.Router();
 
@@ -24,4 +24,4 @@ router.delete("/me/addresses/:addressId", protect(), deleteAddress);
 router.get("/", protect({ isAdmin: true }), adminOnly, getAllUsers);
 router.delete("/:id", protect({ isAdmin: true }), adminOnly, removeUser);
 
-module.exports = router;
+export default router;

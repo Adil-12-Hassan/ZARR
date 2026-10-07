@@ -1,7 +1,6 @@
 import React from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import "../global.css";
 import "../styles/pages/aboutPage.css";
 
 function AboutPage() {
@@ -15,7 +14,7 @@ function AboutPage() {
                         <span className="about-eyebrow">ABOUT ZARR</span>
                         <h1>BUILT ON PASSION.<br /><span>DRIVEN BY PURPOSE.</span></h1>
                         <div className="about-line"></div>
-                        <p> ZARR was founded with a singular vision — to
+                        <p> ZARR was founded with a singular vision  - to
                             timepieces that embody the perfect balance of imeless elegance and modern precision. Every watch we craft is a reflection of our dedication to quality, craftsmanship, and the pursuit of excellence.</p>
                     </div>
                 </section>
@@ -26,7 +25,7 @@ function AboutPage() {
                         <article className="pillar-card">
                             <div className="pillar-icon">Z</div>
                             <h2>OUR STORY</h2>
-                            <p>Born from a passion for horology and a commitment to excellence, ZARR is more than a watch brand — it is a legacy in the making.</p>
+                            <p>Born from a passion for horology and a commitment to excellence, ZARR is more than a watch brand  - it is a legacy in the making.</p>
                         </article>
                         {/* OUR MISSION */}
                         <article className="pillar-card">

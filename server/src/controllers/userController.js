@@ -1,6 +1,6 @@
-const User = require("../models/User");
-const Product = require("../models/Product");
-const mongoose = require("mongoose");
+import User from "../models/User.js";
+import Product from "../models/Product.js";
+import mongoose from "mongoose";
 
 const MAX_SAVED_ADDRESSES = 20;
 const MAX_WISHLIST_ITEMS = 100;
@@ -131,7 +131,7 @@ async function getAllUsers(req, res, next) {
   }
 }
 
-module.exports = {
+export {
   getMe,
   updateMe,
   changePassword,

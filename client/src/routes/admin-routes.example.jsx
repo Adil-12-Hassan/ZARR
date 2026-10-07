@@ -1,5 +1,5 @@
 /**
- * Example only — shows how these files plug into react-router-dom.
+ * Example only  - shows how these files plug into react-router-dom.
  * Merge this into your existing router setup; don't mount it twice.
  */
 import { createBrowserRouter, RouterProvider } from "react-router-dom";

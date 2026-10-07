@@ -1,163 +1,49 @@
-/* NAVBAR */
 .navbar {
-    position: relative;
-    z-index: 1000;
-    width: 100%;
-    height: 82px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 6%;
-    background: #07100d;
-    border-bottom: 1px solid rgba(194, 157, 79, 0.25);
+  position: relative;
+  z-index: 1000;
+  width: 100%;
+  height: 82px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  padding: 0 clamp(20px, 6vw, 88px);
+  background: #07100d;
+  border-bottom: 1px solid rgba(194, 157, 79, .25);
 }
 
-/* LOGO */
-.navbar-logo {
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-}
-
-.navbar-logo img {
-    display: block;
-    width: 95px;
-    height: auto;
-}
-
-/* MENU */
-.navbar-menu {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    min-width: 0;
-}
-
-.navbar-menu ul {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 36px;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
-
-.navbar-menu a {
-    position: relative;
-    display: block;
-    color: #e9e5d8;
-    text-decoration: none;
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    white-space: nowrap;
-    transition: color 0.3s ease;
-}
-
-.navbar-menu a:hover {
-    color: #c29d4f;
-}
-
-.navbar-toggle {
-    display: none;
-    width: 38px;
-    height: 38px;
-    flex: 0 0 auto;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid rgba(194, 157, 79, 0.35);
-    background: transparent;
-    color: #e9e5d8;
-    cursor: pointer;
-}
-
-/* ACTIONS */
-.navbar-actions {
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    gap: 18px;
-}
-
-.navbar-action {
-    position: relative;
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    border: none;
-    background: transparent;
-    color: #e9e5d8;
-    cursor: pointer;
-    transition: color 0.3s ease;
-}
-
-.navbar-action:hover {
-    color: #c29d4f;
-}
-
-.navbar-action i {
-    font-size: 15px;
-}
-
-/* CART BADGE */
-.cart-count {
-    position: absolute;
-    top: 1px;
-    right: -2px;
-    min-width: 15px;
-    height: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 3px;
-    border-radius: 50%;
-    background: #c29d4f;
-    color: #07100d;
-    font-size: 8px;
-    font-weight: 700;
-}
+.navbar-logo { flex: 0 0 auto; display: flex; align-items: center; }
+.navbar-logo a { display: inline-flex; align-items: center; }
+.navbar-logo img { display: block; width: 95px; height: auto; }
+.navbar-menu { flex: 1; display: flex; justify-content: center; min-width: 0; }
+.navbar-menu ul { display: flex; align-items: center; justify-content: center; gap: clamp(16px, 2.5vw, 36px); margin: 0; padding: 0; list-style: none; }
+.navbar-menu a { position: relative; display: block; padding: 10px 0; color: #e9e5d8; text-decoration: none; font-size: 10px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; white-space: nowrap; transition: color .2s ease; }
+.navbar-menu a::after { position: absolute; right: 0; bottom: 3px; left: 0; height: 1px; content: ""; background: var(--brand-gold); transform: scaleX(0); transform-origin: right; transition: transform .2s ease; }
+.navbar-menu a:hover, .navbar-menu a[aria-current="page"] { color: var(--brand-gold); }
+.navbar-menu a:hover::after, .navbar-menu a[aria-current="page"]::after { transform: scaleX(1); transform-origin: left; }
+.navbar-actions { flex: 0 0 auto; display: flex; align-items: center; gap: 10px; }
+.navbar-action { position: relative; width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center; padding: 0; border: 0; background: transparent; color: #e9e5d8; text-decoration: none; cursor: pointer; transition: color .2s ease; }
+.navbar-action:hover { color: var(--brand-gold); }
+.navbar-action i { font-size: 15px; }
+.cart-count { position: absolute; top: 1px; right: 0; min-width: 17px; height: 17px; display: flex; align-items: center; justify-content: center; padding: 0 4px; border-radius: 50%; background: var(--brand-gold); color: #07100d; font-size: 9px; font-weight: 700; }
+.navbar-toggle { display: none; width: 40px; height: 40px; flex: 0 0 auto; align-items: center; justify-content: center; border: 1px solid rgba(194, 157, 79, .35); background: transparent; color: #e9e5d8; cursor: pointer; }
 
 @media (max-width: 1050px) {
-    .navbar-menu {
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        z-index: 1001;
-        width: 100%;
-        padding: 10px 6% 18px;
-        border-bottom: 1px solid rgba(194, 157, 79, 0.3);
-        background: #07100d;
-    } .navbar-menu.is-open {
-        display: block;
-    } .navbar-menu ul {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 0;
-    } .navbar-menu li + li {
-        border-top: 1px solid rgba(194, 157, 79, 0.12);
-    } .navbar-menu a {
-        padding: 14px 0;
-    } .navbar-toggle {
-        display: inline-flex;
-    }
+  .navbar { gap: 14px; }
+  .navbar-menu { display: none; position: absolute; top: 100%; right: 0; left: 0; z-index: 1001; width: 100%; padding: 10px clamp(20px, 6vw, 88px) 18px; border-bottom: 1px solid rgba(194, 157, 79, .3); background: #07100d; box-shadow: 0 18px 30px rgba(0,0,0,.25); }
+  .navbar-menu.is-open { display: block; }
+  .navbar-menu ul { flex-direction: column; align-items: stretch; gap: 0; }
+  .navbar-menu li + li { border-top: 1px solid rgba(194, 157, 79, .12); }
+  .navbar-menu a { padding: 12px 0; }
+  .navbar-menu a::after { display: none; }
+  .navbar-toggle { display: inline-flex; order: 3; }
+  .navbar-logo { margin-right: auto; }
 }
 
 @media (max-width: 480px) {
-    .navbar {
-        height: 72px;
-        padding-inline: 16px;
-    } .navbar-logo img {
-        width: 82px;
-    } .navbar-actions {
-        gap: 8px;
-    } .navbar-action {
-        width: 32px;
-        height: 36px;
-    }
+  .navbar { height: 72px; gap: 8px; padding-inline: 14px; }
+  .navbar-logo img { width: 78px; }
+  .navbar-actions { gap: 2px; }
+  .navbar-action { width: 34px; height: 38px; }
+  .navbar-toggle { width: 36px; height: 38px; }
 }

@@ -2,7 +2,6 @@ import React from "react";
 import Navbar from "../components/Navbar";
 import Newsletter from "../components/Newsletter";
 import Footer from "../components/Footer";
-import "../global.css"
 import "../styles/pages/journalPage.css";
 
 const journalImageUrls = [
@@ -79,7 +78,7 @@ const articles = [
         category: "STYLE",
         title: "The Perfect Watch for Every Occasion",
         description:
-            "From business meetings to black tie events—choose the right timepiece.",
+            "From business meetings to black tie events -choose the right timepiece.",
     },
 ];
 

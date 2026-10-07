@@ -1,5 +1,5 @@
 /*  =================
-   ZARR Admin — design tokens
+   ZARR Admin  - design tokens
    Copied from the storefront's :root palette. One fix: --color-green-black
    was missing a hex digit (#03120 -> #03120f) so it doesn't fall back to
    black in every browser.

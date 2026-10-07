@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import "../global.css";
 import "../styles/pages/collectionPage.css";
 import useCartStore from "../store/cartStore";
 import { productAPI, subscribeToProductUpdates } from "../api/api";
 import { useAuth } from "../context/AuthContext";
+import heroImage from "../assets/hero-image-optimized.jpg";
 
 function FilterIcon() {
     return (
@@ -157,6 +157,8 @@ function CollectionPage() {
             result.sort((a, b) => Number(b.price || 0) - Number(a.price || 0));
         } else if (sort === "newest") {
             result.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+        } else if (sort === "name") {
+            result.sort((a, b) => String(a.name || "").localeCompare(String(b.name || "")));
         }
 
         return result;
@@ -167,7 +169,7 @@ function CollectionPage() {
             <Navbar />
             <main className="shop-page">
                 {/* COLLECTION HEADER */}
-                <section className="collection-header">
+                <section className="collection-header" style={{ "--collection-image": `url("${heroImage}")` }}>
                     <div className="collection-header-content">
                         <span className="collection-eyebrow">ZARR TIMEPIECES</span>
                         <h1>OUR <span>COLLECTION</span></h1>
@@ -198,10 +200,10 @@ function CollectionPage() {
                         </div>
                         {/* FILTER BAR */}
                         <div className="filter-bar">
-                            <button className="filter-main-button">
-                                <FilterIcon />
-                                <span>FILTERS</span>
-                                <small>5</small>
+                                <button className="filter-main-button" type="button" onClick={clearFilters} aria-label="Clear all active filters">
+                                    <FilterIcon />
+                                    <span>CLEAR FILTERS</span>
+                                    <small>{Object.values(filters).filter(Boolean).length + Number(gender !== "All")}</small>
                             </button>
                             {/* Category */}
                             <div className="filter-select">
@@ -281,7 +283,7 @@ function CollectionPage() {
                                     <article className="product-card" key={product._id || product.id}>
                                         <div className="product-image-wrapper">
                                             {product.isNewArrival && (<span className="new-badge">NEW</span>)}
-                                            <img src={product.image || product.images?.[0]} alt={product.name} />
+                                            <img src={product.image || product.images?.[0]} alt={product.name} loading="lazy" decoding="async" />
                                         </div>
                                         <div className="product-info">
                                             <h2>{product.name}</h2>
@@ -296,7 +298,7 @@ function CollectionPage() {
                             </div>
                         )}
                         {/* EMPTY STATE */}
-                        {filteredProducts.length === 0 && (
+                        {!loading && !error && filteredProducts.length === 0 && (
                             <div className="empty-products">
                                 <h2>No watches found</h2>
                                 <p>Try adjusting your filters to find another timepiece.</p>

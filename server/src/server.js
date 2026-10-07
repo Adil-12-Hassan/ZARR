@@ -1,14 +1,12 @@
-require("dotenv").config();
-const http = require("http");
-const app = require("./app");
-const connectDB = require("./config/db");
-const initSockets = require("./sockets");
-
+import "dotenv/config";
+import http from "node:http";
+import { pathToFileURL } from "node:url";
+import app from "./app.js";
+import connectDB from "./config/db.js";
+import initSockets from "./sockets/index.js";
 const PORT = process.env.PORT || 5000;
-
 function validateProductionConfig() {
   if (process.env.NODE_ENV !== "production") return;
-
   const { MONGO_URI, CLIENT_URL, JWT_SECRET, JWT_ADMIN_SECRET } = process.env;
   if (!MONGO_URI || !CLIENT_URL || !JWT_SECRET || !JWT_ADMIN_SECRET) {
     throw new Error("Production requires MONGO_URI, CLIENT_URL, JWT_SECRET, and JWT_ADMIN_SECRET.");
@@ -23,27 +21,34 @@ function validateProductionConfig() {
   ) {
     throw new Error("Production JWT secrets must be distinct and at least 32 characters long.");
   }
-  let frontendUrl;
+  const clientOrigins = CLIENT_URL.split(",").map((origin) => origin.trim()).filter(Boolean);
   try {
-    frontendUrl = new URL(CLIENT_URL);
+    if (!clientOrigins.length || clientOrigins.some((origin) => {
+      const parsed = new URL(origin);
+      return parsed.protocol !== "https:" || parsed.origin !== origin.replace(/\/$/, "");
+    })) {
+      throw new Error();
+    }
   } catch {
-    throw new Error("CLIENT_URL must be a valid HTTPS origin in production.");
-  }
-  if (frontendUrl.protocol !== "https:" || frontendUrl.origin !== CLIENT_URL.replace(/\/$/, "")) {
-    throw new Error("CLIENT_URL must be a valid HTTPS origin in production.");
+    throw new Error("CLIENT_URL must contain one or more HTTPS origins, separated by commas.");
   }
 }
-
 validateProductionConfig();
-
 async function start() {
   await connectDB();
   const server = http.createServer(app);
   const io = initSockets(server);
   app.set("io", io); // controllers reach it via req.app.get("io")
-
   server.listen(PORT, () => {
     console.log(`ZARR API running on port ${PORT} (${process.env.NODE_ENV || "development"})`);
   });
 }
-start();
+
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  start().catch((error) => {
+    console.error("API startup failed:", error.message);
+    process.exitCode = 1;
+  });
+}
+
+export default app;

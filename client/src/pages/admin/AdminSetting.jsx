@@ -1,4 +1,5 @@
 import { useState } from "react";
+import PasswordInput from "../../components/PasswordInput";
 import "../../styles/components/admin-ui.css";
 import "../../styles/pages/adminSetting.css";
 
@@ -285,9 +286,8 @@ export default function AdminSettings() {
             <div className="form-grid form-grid--1">
               <div className="form-field">
                 <label>Current password</label>
-                <input
+                <PasswordInput
                   className="admin-input"
-                  type="password"
                   required
                   value={passwords.current}
                   onChange={(e) =>
@@ -297,9 +297,8 @@ export default function AdminSettings() {
               </div>
               <div className="form-field">
                 <label>New password</label>
-                <input
+                <PasswordInput
                   className="admin-input"
-                  type="password"
                   required
                   value={passwords.next}
                   onChange={(e) =>
@@ -309,9 +308,8 @@ export default function AdminSettings() {
               </div>
               <div className="form-field">
                 <label>Confirm new password</label>
-                <input
+                <PasswordInput
                   className="admin-input"
-                  type="password"
                   required
                   value={passwords.confirm}
                   onChange={(e) =>

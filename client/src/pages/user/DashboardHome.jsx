@@ -66,13 +66,13 @@ function DashboardHome() {
                     </div>
 
                     {loading ? (
-                        <div className="order-row"><strong>Loading orders</strong><span>—</span><span>Fetching your order history.</span><strong>—</strong><span>—</span></div>
+                        <div className="order-row"><strong>Loading orders</strong><span> -</span><span>Fetching your order history.</span><strong> -</strong><span> -</span></div>
                     ) : error ? (
-                        <div className="order-row" role="alert"><strong>Orders unavailable</strong><span>—</span><span>{error}</span><strong>—</strong><span>—</span></div>
+                        <div className="order-row" role="alert"><strong>Orders unavailable</strong><span> -</span><span>{error}</span><strong> -</strong><span> -</span></div>
                     ) : recentOrders.length === 0 ? (
                         <div className="order-row">
                             <strong>No orders yet</strong>
-                            <span>—</span>
+                            <span> -</span>
                             <span>Your recent orders will appear here.</span>
                             <strong>PKR 0</strong>
                             <span className="order-status pending">New</span>

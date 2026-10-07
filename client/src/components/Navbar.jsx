@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import ZARR from "../assets/ZARR.png";
+import ZARR from "../assets/ZARR-optimized.png";
 import "../styles/components/navbar.css";
-import "../../src/global.css";
 
 import useCartStore from "../store/cartStore";
 import CartSidebar from "./CartSidebar";
@@ -23,6 +22,21 @@ function Navbar() {
         return () => window.removeEventListener("zarr:open-cart", openCart);
     }, []);
 
+    useEffect(() => {
+        const closeDesktopMenu = () => {
+            if (window.innerWidth > 1050) setIsMenuOpen(false);
+        };
+        const closeOnEscape = (event) => {
+            if (event.key === "Escape") setIsMenuOpen(false);
+        };
+        window.addEventListener("resize", closeDesktopMenu);
+        window.addEventListener("keydown", closeOnEscape);
+        return () => {
+            window.removeEventListener("resize", closeDesktopMenu);
+            window.removeEventListener("keydown", closeOnEscape);
+        };
+    }, []);
+
     return (
         <>
             {/* =========================
@@ -30,12 +44,12 @@ function Navbar() {
             ========================== */}
             <header className="navbar">             {/* Left Side Logo */}
                 <div className="navbar-logo">
-                    <a href="/">
+                    <Link to="/" onClick={() => setIsMenuOpen(false)}>
                         <img
                             src={ZARR}
                             alt="ZARR LOGO"
                         />
-                    </a>
+                    </Link>
                 </div>             <button
                     className="navbar-toggle"
                     type="button"
@@ -50,31 +64,28 @@ function Navbar() {
                 ========================== */}
                 <nav
                     id="primary-navigation"
-                    className={`navbar-menu${isMenuOpen ? " is-open" : ""}`}
+                        className={`navbar-menu${isMenuOpen ? " is-open" : ""}`}
+                        aria-label="Main navigation"
                 >
                     <ul>
                         <li>
-                            <a href="/" onClick={() => setIsMenuOpen(false)}>Home</a>
+                            <Link to="/" onClick={() => setIsMenuOpen(false)}>Home</Link>
                         </li>                     <li>
-                            <a href="/collection" onClick={() => setIsMenuOpen(false)}>
+                            <Link to="/collection" onClick={() => setIsMenuOpen(false)}>
                                 Collection
-                            </a>
+                            </Link>
                         </li>                     <li>
-                            <a href="/about" onClick={() => setIsMenuOpen(false)}>
+                            <Link to="/about" onClick={() => setIsMenuOpen(false)}>
                                 About Us
-                            </a>
+                            </Link>
                         </li>                     <li>
-                            <a href="/journals" onClick={() => setIsMenuOpen(false)}>
+                            <Link to="/journals" onClick={() => setIsMenuOpen(false)}>
                                 Journal
-                            </a>
+                            </Link>
                         </li>                     <li>
-                            <a href="/article" onClick={() => setIsMenuOpen(false)}>
-                                Articles Here
-                            </a>
-                        </li>                     <li>
-                            <a href="/contact" onClick={() => setIsMenuOpen(false)}>
+                            <Link to="/contact" onClick={() => setIsMenuOpen(false)}>
                                 Contact
-                            </a>
+                            </Link>
                         </li>
                     </ul>
                 </nav>

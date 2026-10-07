@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { userAPI } from "../../api/api";
 import { useAuth } from "../../context/AuthContext";
+import PasswordInput from "../../components/PasswordInput";
 
 function AccountPage({ type }) {
     const isAddress = type === "Addresses";
@@ -89,8 +90,8 @@ function AccountPage({ type }) {
                 <section className="dashboard-panel">
                     <h3>Change password</h3>
                     <form onSubmit={handlePasswordSubmit} className="profile-form">
-                        <div className="form-group"><label htmlFor="currentPassword">Current password</label><input id="currentPassword" type="password" autoComplete="current-password" required value={currentPassword} onChange={(event) => setCurrentPassword(event.target.value)} /></div>
-                        <div className="form-group"><label htmlFor="newPassword">New password</label><input id="newPassword" type="password" autoComplete="new-password" minLength={8} maxLength={72} required value={newPassword} onChange={(event) => setNewPassword(event.target.value)} /></div>
+                        <div className="form-group"><label htmlFor="currentPassword">Current password</label><PasswordInput id="currentPassword" autoComplete="current-password" required value={currentPassword} onChange={(event) => setCurrentPassword(event.target.value)} /></div>
+                        <div className="form-group"><label htmlFor="newPassword">New password</label><PasswordInput id="newPassword" autoComplete="new-password" minLength={8} maxLength={72} required value={newPassword} onChange={(event) => setNewPassword(event.target.value)} /></div>
                         <button className="dashboard-primary-button" type="submit" disabled={saving}>{saving ? "Updating…" : "Update password"}</button>
                     </form>
                 </section>

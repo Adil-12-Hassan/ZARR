@@ -17,7 +17,7 @@
             rgba(2, 16, 12, 0.88) 42%,
             rgba(2, 16, 12, 0.45) 75%,
             rgba(2, 10, 8, 0.25) 100%),
-        url(/src/assets/hero-image.jpg);
+        var(--collection-image);
     background-size: cover;
     background-position: center;
 }
@@ -596,8 +596,24 @@
 }
 
 @media (max-width: 600px) {
+    .collection-header {
+        min-height: 280px;
+    }
+
+    .collection-header h1 {
+        font-size: clamp(38px, 10vw, 54px);
+    }
+
+    .collection-header p br {
+        display: none;
+    }
+
+    .collection-container {
+        width: calc(100% - 24px);
+    }
+
     .collection-header-content {
-        padding: 42px 0;
+        padding: 38px 0;
     }
 
     .collection-topbar {
@@ -631,12 +647,32 @@
     }
 
     .products-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
         padding: 16px 14px 8px;
     }
 
     .product-image-wrapper {
         aspect-ratio: 1 / 1;
+    }
+
+    .product-info {
+        min-height: 100px;
+        padding: 14px 8px 12px;
+    }
+
+    .product-info h2 {
+        font-size: 12px;
+        letter-spacing: .4px;
+    }
+
+    .product-price {
+        font-size: 11px;
+    }
+
+    .details-button {
+        font-size: 9px;
+        letter-spacing: .4px;
     }
 
     .collection-values {
@@ -652,4 +688,8 @@
     .value-item:last-child {
         border-bottom: none;
     }
+}
+
+@media (max-width: 360px) {
+    .products-grid { grid-template-columns: minmax(0, 1fr); }
 }

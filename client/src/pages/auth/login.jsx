@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import Footer from "../../components/Footer";
 import Navbar from "../../components/Navbar";
+import PasswordInput from "../../components/PasswordInput";
 import "../../styles/pages/auth.css";
 
 const Login = () => {
@@ -88,8 +89,7 @@ const Login = () => {
                 </div>
                 <div className="form-group">
                   <label htmlFor="loginPassword">Password</label>
-                  <input
-                    type="password"
+                  <PasswordInput
                     id="loginPassword"
                     name="password"
                     placeholder="Enter your password"

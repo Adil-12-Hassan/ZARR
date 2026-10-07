@@ -26,8 +26,8 @@ const orderId = (order) => String(order._id || order.id || "");
 const customerName = (order) => order.shippingAddress?.fullName || order.user?.username || order.customer || "Customer";
 const customerEmail = (order) => order.shippingAddress?.email || order.user?.email || order.email || "";
 const itemSummary = (order) => Array.isArray(order.items)
-  ? order.items.map((item) => item?.name).filter(Boolean).join(", ") || "—"
-  : order.items || "—";
+  ? order.items.map((item) => item?.name).filter(Boolean).join(", ") || " -"
+  : order.items || " -";
 
 export default function ManageOrders() {
   const { orders, updateStatus } = useOrders();
@@ -89,7 +89,7 @@ export default function ManageOrders() {
                 </td>
                 <td>{itemSummary(o)}</td>
                 <td>{money(o.total)}</td>
-                <td>{o.createdAt ? new Date(o.createdAt).toLocaleDateString("en-GB") : o.date || "—"}</td>
+                <td>{o.createdAt ? new Date(o.createdAt).toLocaleDateString("en-GB") : o.date || " -"}</td>
                 <td>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <span className={`badge ${STATUS_BADGE[o.status] || "badge-received"}`}>{o.status || "Pending"}</span>

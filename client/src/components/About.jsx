@@ -1,17 +1,16 @@
 import React from "react";
-import aboutImage from "../assets/about-watch.jpg";
+import aboutImage from "../assets/about-watch-optimized.jpg";
 import crownIcon from "../assets/crown.jpg";
-import diamondIcon from "../assets/diamond.png";
-import securityIcon from "../assets/security.png";
+import diamondIcon from "../assets/diamond-optimized.png";
+import securityIcon from "../assets/security-optimized.png";
 import "../styles/components/about.css";
-import "../global.css"
 
 function About() {
     return (
         <section className="about">
             {/* Background Image */}
             <div className="about-background">
-                <img src={aboutImage} alt="ZARR luxury watch"/>
+                <img src={aboutImage} alt="ZARR luxury watch" loading="lazy" decoding="async" />
             </div>
             {/* About Content */}
             <div className="about-content">

@@ -1,6 +1,6 @@
-const { Server } = require("socket.io");
-const jwt = require("jsonwebtoken");
-const User = require("../models/User");
+import { Server } from "socket.io";
+import jwt from "jsonwebtoken";
+import User from "../models/User.js";
 
 /**
  * Every connecting client sends its JWT in the handshake (auth.token).
@@ -11,8 +11,12 @@ const User = require("../models/User");
  * polling.
  */
 function initSockets(httpServer) {
+  const clientOrigins = (process.env.CLIENT_URL || "http://localhost:3000")
+    .split(",")
+    .map((origin) => origin.trim().replace(/\/$/, ""))
+    .filter(Boolean);
   const io = new Server(httpServer, {
-    cors: { origin: process.env.CLIENT_URL, credentials: true },
+    cors: { origin: clientOrigins, credentials: true },
   });
 
   io.use(async (socket, next) => {
@@ -49,4 +53,4 @@ function initSockets(httpServer) {
   return io;
 }
 
-module.exports = initSockets;
+export default initSockets;

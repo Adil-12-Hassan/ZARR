@@ -1,5 +1,5 @@
-const User = require("../models/User");
-const generateToken = require("../utils/generateToken");
+import User from "../models/User.js";
+import generateToken from "../utils/generateToken.js";
 
 async function register(req, res, next) {
   try {
@@ -24,7 +24,7 @@ async function register(req, res, next) {
       return res.status(409).json({ message: "An account with that email already exists." });
     }
 
-    // role is never read from the request body — always "user" here.
+    // role is never read from the request body  - always "user" here.
     // Admin accounts are only ever created via scripts/createAdmin.js.
     const user = await User.create({ username: cleanUsername, email: cleanEmail, password, role: "user" });
 
@@ -100,4 +100,4 @@ async function me(req, res) {
   res.json(req.user.toSafeJSON());
 }
 
-module.exports = { register, login, adminLogin, logout, me };
+export { register, login, adminLogin, logout, me };

@@ -5,7 +5,7 @@ import "../../styles/pages/adminLayout.css";
 /**
  * Left navigation for the admin panel.
  * Uses react-router-dom's NavLink so the active route gets the gold
- * indicator automatically — no manual "which page am I on" state needed.
+ * indicator automatically  - no manual "which page am I on" state needed.
  *
  * Swap the `to` paths below to match wherever these routes are mounted
  * in your router (e.g. nested under "/admin/*").

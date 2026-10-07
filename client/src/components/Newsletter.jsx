@@ -1,5 +1,4 @@
 import React from "react";
-import "../global.css"
 import "../styles/components/newsletter.css"
 
 function Newsletter() {

@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import "../styles/pages/checkoutPage.css";
-import "../global.css";
 import useCartStore from "../store/cartStore";
 import { useAuth } from "../context/AuthContext";
 import { useOrders } from "../context/OrdersContext";
@@ -483,7 +482,7 @@ function Checkout() {
                   </button>
                 </div>
               )}
-            </section>         {/* RIGHT SIDE — Order Summary */}
+            </section>         {/* RIGHT SIDE  - Order Summary */}
             <aside className="order-sidebar">
               <div className="order-summary">
                 <div className="summary-header">
@@ -541,7 +540,7 @@ function Checkout() {
                   </div>
                   {couponApplied && (
                     <span className="coupon-success">
-                      ZARR10 applied — 10% discount
+                      ZARR10 applied  - 10% discount
                     </span>
                   )}
                 </div>             {/* Price Breakdown */}

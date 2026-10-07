@@ -1,77 +1,102 @@
-# ZARR Backend (Express + MongoDB)
+# ZARR API
 
-## 1. Install & configure
+The Express and MongoDB service behind the ZARR storefront. It handles customer accounts, the watch catalog, orders, and customer messages.
+
+![Node.js](https://img.shields.io/badge/Runtime-Node.js-339933?logo=nodedotjs&logoColor=white)
+![Express](https://img.shields.io/badge/API-Express-111111?logo=express&logoColor=white)
+![MongoDB](https://img.shields.io/badge/Data-MongoDB-47A248?logo=mongodb&logoColor=white)
+
+## ✨ Included
+
+- JWT authentication with separate customer and admin signing secrets.
+- MongoDB models for users, products, orders, and messages.
+- Role-protected admin routes, rate limits, input sanitization, and Helmet security headers.
+- Stock checks and server-calculated totals when creating orders.
+- Socket.IO events for local development on a persistent Node.js server.
+
+## 🚀 Run locally
+
+From the repository root, copy the example environment file:
+
+```powershell
+Copy-Item server/.env.example server/.env
+```
+
+Then start the API:
 
 ```bash
 cd server
 npm install
-cp .env.example .env
+npm run dev
 ```
 
-Edit `.env`:
-- `MONGO_URI` — local Mongo (`mongodb://127.0.0.1:27017/zarr`) or an Atlas connection string.
-- `JWT_SECRET` / `JWT_ADMIN_SECRET` — two **different** long random strings. Generate one with:
-  ```bash
-  node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"
-  ```
-- `CLIENT_URL` — your frontend's origin (`http://localhost:3000` in dev), used for CORS + sockets.
-- `ADMIN_BOOTSTRAP_EMAIL` / `ADMIN_BOOTSTRAP_PASSWORD` — only used once, see below.
+The server listens on port `5000` by default. Confirm it is running at `http://localhost:5000/api/health`.
 
-## 2. Create your first admin account
+## 🔐 Configure the environment
 
-Public registration (`/api/auth/register`) can **only** ever create `role: "user"` accounts — it's hardcoded, not a bug. The only way to get an admin is this script:
+Set these in `server/.env` for local development or in the hosting provider’s environment for deployment.
+
+| Variable | Purpose |
+| --- | --- |
+| `PORT` | API port; defaults to `5000` |
+| `NODE_ENV` | Runtime mode; use `production` when deployed |
+| `MONGO_URI` | MongoDB connection string |
+| `CLIENT_URL` | Allowed frontend origin(s); comma-separated in production. Development also allows localhost on port `3000`. |
+| `JWT_SECRET` | Customer token signing secret |
+| `JWT_ADMIN_SECRET` | Different signing secret for admin tokens |
+| `JWT_USER_EXPIRES_IN` | Customer token lifetime; defaults to `7d` |
+| `JWT_ADMIN_EXPIRES_IN` | Admin token lifetime; defaults to `2h` |
+| `ADMIN_BOOTSTRAP_EMAIL` | Email for the initial admin account |
+| `ADMIN_BOOTSTRAP_PASSWORD` | Password for the initial admin account |
+
+MongoDB stores application data independently from the API process. Restarting or redeploying the backend should not erase users, products, orders, or messages. Use a persistent MongoDB service (such as MongoDB Atlas) and keep `MONGO_URI` pointed at the same database and database name across deployments. Do not use an in-process or temporary database for production data.
+
+Generate separate JWT secrets with:
+
+```bash
+node --input-type=module -e "import { randomBytes } from 'node:crypto'; console.log(randomBytes(48).toString('hex'))"
+```
+
+Production startup requires HTTPS frontend origins and distinct JWT secrets of at least 32 characters. Never commit `.env` or use example credentials in production.
+
+## 👑 Create the first admin
+
+Set the two `ADMIN_BOOTSTRAP_*` values, then run once from the `server/` directory:
 
 ```bash
 node src/scripts/createAdmin.js
 ```
 
-Run it again any time with a different `ADMIN_BOOTSTRAP_EMAIL` to promote another existing user to admin.
+The script creates an admin account or promotes the matching existing account. Public registration always creates a regular customer account.
 
-## 3. Run it
+## ☁️ Deploy
 
-```bash
-npm run dev     # nodemon, auto-restart
-npm start       # plain node
-```
+For a Vercel API deployment, create a separate project with `server/` as its **Root Directory**. Add `MONGO_URI`, `CLIENT_URL`, `JWT_SECRET`, and `JWT_ADMIN_SECRET` to the project environment. The Express app is exported for Vercel, and database connections are opened lazily for API requests; `/api/health` remains a lightweight liveness check.
 
-`GET /api/health` should return `{ "status": "ok" }`.
+The local startup command also attaches Socket.IO to the HTTP server. The Vercel app export currently serves the REST API without that Socket.IO server, so leave `REACT_APP_ENABLE_REALTIME` unset in the client for this deployment. For Socket.IO updates, run the API on a persistent Node.js host.
 
-## How the admin "session" behaves (per your GCUF-portal request)
+## 📡 Routes
 
-Three layers, stacked:
+All routes are prefixed with `/api`. Protected routes require a bearer token in the `Authorization` header.
 
-1. **Server-side hard cap** — admin JWTs expire after `JWT_ADMIN_EXPIRES_IN` (default 2h), signed with a separate secret from user tokens. Even a copied/leaked token stops working after that.
-2. **Browser-close = logout** — the frontend stores the admin token in `sessionStorage`, not `localStorage`. That's a browser behavior, not something we coded: sessionStorage is wiped the moment the tab/browser closes. Regular users still use `localStorage` (7-day persistence) since normal shoppers expect to stay logged in.
-3. **Idle timeout** — if the admin tab stays open but nobody touches the mouse/keyboard for 30 minutes, the frontend logs the admin out on its own (`AuthContext.jsx`, `ADMIN_IDLE_TIMEOUT_MS`).
+| Area | Endpoints |
+| --- | --- |
+| Health | `GET /api/health` |
+| Auth | `POST /api/auth/register`, `/login`, `/admin/login`; `GET /api/auth/me`; `POST /api/auth/logout` |
+| Products | `GET /api/products`, `GET /api/products/:id`; admin `POST`, `PUT`, and `DELETE` routes |
+| Orders | `POST /api/orders`, `GET /api/orders/my`, admin list and status routes, customer order and cancellation routes |
+| Accounts | Profile, password, wishlist, and address routes under `/api/users` |
+| Messages | Public `POST /api/messages`; admin list, read, and delete routes |
 
-On top of all three: every issued token carries the user's `tokenVersion`. Changing password or calling `/api/auth/logout` bumps it, which invalidates *every* token already out there for that account immediately — not just the one the browser deletes.
+## 🛡️ Session behavior
 
-## Live admin dashboard updates
+- Customer tokens use `JWT_SECRET` and persist in browser storage.
+- Admin tokens use `JWT_ADMIN_SECRET`, expire sooner, and are stored in session storage.
+- Logout and password changes increment `tokenVersion`, which invalidates previously issued tokens for that account.
+- The admin interface also applies a 30-minute inactivity timeout.
 
-Socket.IO is wired in (`src/sockets/index.js`). Connect from the frontend with the current token:
+## 📌 Current scope
 
-```js
-import { io } from "socket.io-client";
-const socket = io(process.env.REACT_APP_BACKEND_URL.replace("/api", ""), {
-  auth: { token },
-});
-socket.on("order:new", (order) => { /* prepend to admin order list */ });
-socket.on("order:updated", (order) => { /* patch status in place */ });
-socket.on("message:new", (msg) => { /* prepend to admin inbox */ });
-```
-
-Admin sockets auto-join an `"admins"` room server-side based on their JWT; regular users join `user:<their id>` so they could also get pushed live status updates on their own orders later if you want that on the user dashboard too — not wired into any UI yet, just available.
-
-## Routes implemented (all under `/api`)
-
-- `auth`: register, login, admin/login, logout, me
-- `products`: list/get (public), create/update/delete (admin)
-- `orders`: place (user), my (user), list-all (admin), get one, cancel (user, only while Pending/Confirmed), status (admin)
-- `users`: me (get/update/password), wishlist toggle, addresses, admin list/remove
-- `messages`: send (public/guest OK), list/read/delete (admin)
-
-## Not done yet — still your call
-
-- Payment gateway integration (COD only, enforced server-side — `Order.paymentMethod` only accepts `"Cash on Delivery"` even if the frontend sent something else)
-- Image upload/storage for products (currently expects a plain URL string)
-- Socket.IO wired into the actual admin dashboard components (server side is ready; frontend components still poll via `orderAPI.getAll()`/`messageAPI.getAll()` — swap to the events above whenever you want true push updates)
+- Orders support Cash on Delivery only; no payment provider is connected.
+- Product image fields accept URLs; image upload and storage are not included.
+- Socket.IO events are emitted by local server processes but are not fully consumed by the admin interface.

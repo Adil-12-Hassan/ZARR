@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import "../../styles/pages/auth.css";
-import "../../global.css";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
+import PasswordInput from "../../components/PasswordInput";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -105,8 +105,7 @@ const Register = () => {
                 </div>
                 <div className="form-group">
                   <label htmlFor="password">Password</label>
-                  <input
-                    type="password"
+                  <PasswordInput
                     id="password"
                     name="password"
                     minLength={8}
@@ -118,8 +117,7 @@ const Register = () => {
                 </div>
                 <div className="form-group">
                   <label htmlFor="confirmPassword">Confirm Password</label>
-                  <input
-                    type="password"
+                  <PasswordInput
                     id="confirmPassword"
                     name="confirmPassword"
                     placeholder="Confirm your password"

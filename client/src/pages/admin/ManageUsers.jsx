@@ -103,7 +103,7 @@ export default function ManageUsers() {
                   <span className="admin-table__primary">{u.username}</span>
                   <div className="admin-table__muted">{u.email}</div>
                 </td>
-                <td>{u.createdAt ? new Date(u.createdAt).toLocaleDateString("en-GB") : "—"}</td>
+                <td>{u.createdAt ? new Date(u.createdAt).toLocaleDateString("en-GB") : " -"}</td>
                 <td>{totals.count}</td>
                 <td>{money(totals.spent)}</td>
               </tr>;

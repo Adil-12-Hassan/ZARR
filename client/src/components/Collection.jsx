@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "../global.css";
 import "../styles/components/collection.css";
 import { productAPI, subscribeToProductUpdates } from "../api/api";
 
@@ -36,7 +35,7 @@ function Collection() {
                     <div className="product-card" key={product._id || product.id}>
                         <div className="product-image-wrapper">
                             {product.isNewArrival && <span className="product-badge">NEW</span>}
-                            <img src={product.image || product.images?.[0]} alt={product.name} className="product-image" />
+                            <img src={product.image || product.images?.[0]} alt={product.name} className="product-image" loading="lazy" decoding="async" />
                         </div>
                         <div className="product-info">
                             <h3 className="product-name">{product.name}</h3>

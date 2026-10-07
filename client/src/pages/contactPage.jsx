@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import "../global.css";
 import "../styles/pages/contactPage.css";
 import contactImage from "../assets/contact-bc.jpeg";
 import { messageAPI } from "../api/api";
@@ -121,7 +120,7 @@ function ContactPage() {
             </div>
             <p className="contact-introduction">
               We would love to hear from you. Whether you have a question about
-              our timepieces, need assistance or just want to say hello — we're
+              our timepieces, need assistance or just want to say hello  - we're
               here for you.
             </p>
             <div className="contact-detail">

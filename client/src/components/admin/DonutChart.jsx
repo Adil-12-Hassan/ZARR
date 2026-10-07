@@ -8,7 +8,7 @@ const PALETTE = [
 ];
 
 /**
- * Minimal SVG donut chart — no charting library required.
+ * Minimal SVG donut chart  - no charting library required.
  * data: [{ label: "Automatic", value: 42000 }, ...]
  */
 export default function DonutChart({ data, size = 200, thickness = 26 }) {
